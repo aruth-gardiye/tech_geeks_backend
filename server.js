@@ -58,7 +58,7 @@ mongoose.connect(process.env.MDB_URI, { useNewUrlParser: true, useUnifiedTopolog
 
 
 // start server
-const port = process.env.EXPRESS_API_PORT || 3001;
+const port = process.env.PORT || 3001;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
 

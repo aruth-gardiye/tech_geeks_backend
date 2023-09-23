@@ -7,13 +7,13 @@ This folder contains the server for the TechGeeks prototype platform. The server
 Add a `.env` file to the root of the server directory mirroring the `.env.example` file. The `.env` file should contain the following:
 
 ```
-EXPRESS_API_PORT = 3001
+PORT = 3001
 MDB_URI = "YOUR_MONGODB_URI"
 ```
 
-The `EXPRESS_API_PORT` port is the port that the server will be running on. The `MDB_URI` is the URI used to connect to the MongoDB database.
+The `PORT` port is the port that the server will be running on. The `MDB_URI` is the URI used to connect to the MongoDB database.
 
-Run the following commands after navigating to the 'server' directory:
+Run the following commands after navigating to the root directory:
 
 ```
 npm install

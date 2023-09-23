@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "npm install && node server.js",
+    "build": "npm install && node server.js",
     "dev": "npm install && nodemon server.js"
   },
   "repository": {
