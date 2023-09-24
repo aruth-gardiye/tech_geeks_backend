@@ -8,7 +8,8 @@ const morgan = require('morgan');
 const path = require('path');
 const rfs = require('rotating-file-stream');
 const status = require('http-status');
-const routes = require('./routes.js'); // change later to routes/
+// const routes = require('./dummyRoutes.js'); // change later to routes/
+const routes = require('./routes');
 const mongoose = require('mongoose');
 const app = express(); 
 
@@ -30,7 +31,7 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 
 //routes
-app.use('/api', routes);
+app.use('/', routes);
 
 
 //error handler
@@ -55,7 +56,6 @@ app.use((error, req, res, next) => {
 mongoose.connect(process.env.MDB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
-
 
 // start server
 const port = process.env.PORT || 3001;
