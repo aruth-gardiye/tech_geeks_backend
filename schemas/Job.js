@@ -71,7 +71,7 @@ const jobSchema = new Schema(
       bidStatus: {
         type: String,
         required: false,
-        enum: ['submitted', 'accepted', 'rejected', 'withdrawn'],
+        enum: ['submitted', 'assigned', 'accepted', 'rejected', 'withdrawn', 'stale'],
         default: 'submitted'
       }
     }],
@@ -84,7 +84,7 @@ const jobSchema = new Schema(
     jobStatus: {
       type: String,
       required: true,
-      enum: ['available', 'accepted', 'in-progress', 'completed', 'expired', 'cancelled'],
+      enum: ['available', 'accepted', 'assigned', 'in-progress', 'completed', 'expired', 'cancelled'],
       default: 'available'
     },
     jobPrice: {
@@ -108,6 +108,11 @@ const jobSchema = new Schema(
   }
 );
 
+// sort jobApplicants by bid in ascending order
+jobSchema.methods.sortJobApplicantsByBid = function() {
+  this.jobApplicants.sort((a, b) => a.bid - b.bid);
+};
+
 // validate job
 jobSchema.statics.validateJob = function (job) {
   const schema = Joi.object({
@@ -124,9 +129,9 @@ jobSchema.statics.validateJob = function (job) {
     jobApplicants: Joi.array().items(Joi.object({
       userId: Joi.string().min(1).required(),
       bid: Joi.number().min(1).required(),
-      bidStatus: Joi.string().valid('submitted', 'accepted', 'rejected', 'withdrawn').required()
+      bidStatus: Joi.string().valid('submitted', 'accepted', 'assigned', 'rejected', 'withdrawn', 'stale').required()
     })).optional(),
-    jobStatus: Joi.string().valid('available', 'accepted', 'in-progress', 'completed', 'expired', 'cancelled').required(),
+    jobStatus: Joi.string().valid('available', 'accepted', 'assigned', 'in-progress', 'completed', 'expired', 'cancelled').required(),
     jobPrice: Joi.number().min(1).required(),
     jobOwner: Joi.string().min(1).required(),
   });
@@ -150,10 +155,10 @@ jobSchema.statics.validateJobUpdate = function (job) {
     jobApplicants: Joi.array().items(Joi.object({
       userId: Joi.string().hex().length(24).required(),
       bid: Joi.number().min(1).required(),
-      bidStatus: Joi.string().valid('submitted', 'accepted', 'rejected', 'withdrawn').required()
+      bidStatus: Joi.string().valid('accepted', 'rejected').required()
     })).optional(),
-    selectedBid: Joi.string().hex().length(24).required(),
-    jobStatus: Joi.string().valid('available', 'accepted', 'in-progress', 'completed', 'expired', 'cancelled').optional(),
+    selectedBid: Joi.string().hex().length(24).optional(),
+    jobStatus: Joi.string().valid('available', 'accepted', 'in-progress', 'completed', 'cancelled').optional(),
     jobPrice: Joi.number().min(1).optional(),
     jobOwner: Joi.string().min(1).optional(),
   });
@@ -165,8 +170,8 @@ jobSchema.statics.validateJobUpdateByServiceProvider = function (job) {
   const schema = Joi.object({
     jobId: Joi.string().hex().length(24).required(),
     userId: Joi.string().hex().length(24).required(),
-    bid: Joi.number().min(1).required(),
-    bidStatus: Joi.string().valid('submitted', 'accepted', 'rejected', 'withdrawn').required()
+    bid: Joi.number().min(1).optional(),
+    bidStatus: Joi.string().valid('submitted', 'assigned', 'withdrawn').optional()
   });
   return schema.validate(job);
 }

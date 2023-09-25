@@ -9,6 +9,7 @@ Add a `.env` file to the root of the server directory mirroring the `.env.exampl
 ```
 PORT = 3001
 MDB_URI = "YOUR_MONGODB_URI"
+MAPBOX_TOKEN = "YOUR_MAPBOX_TOKEN"
 ```
 
 The `PORT` port is the port that the server will be running on. The `MDB_URI` is the URI used to connect to the MongoDB database.

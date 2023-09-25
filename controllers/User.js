@@ -1,151 +1,5 @@
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
-
-// const mongoose = require('mongoose');
-// const Schema = mongoose.Schema;
-// const bcrypt = require('bcrypt');
-// const { NO_CONTENT } = require('http-status');
-
-// const userSchema = new Schema({
-//   _id: mongoose.Schema.Types.ObjectId,
-//   username: {
-//     type: String,
-//     required: true,
-//     unique: true,
-//     minlength: 1,
-//     maxlength: 50,
-//     trim: true
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//     minlength: 1,
-//     trim: true
-//   },
-//   email: {
-//     type: String,
-//     required: true,
-//     unique: true,
-//     minlength: 4,
-//     trim: true
-//   },
-//   accType: {
-//     type: String,
-//     required: true,
-//     enum: ['admin', 'support', 'client', 'provider'],
-//     default: 'client'
-//   },
-//   firstName: {
-//     type: String,
-//     required: false,
-//   },
-//   lastName: {
-//     type: String,
-//     required: false,
-//   },
-//   tel: {
-//     type: String,
-//     required: false,
-//   },
-//   location: [{
-//     _id: false,
-//     locationName: {
-//       type: String,
-//       required: false,
-//     },
-//     longitude: {
-//       type: Number,
-//       required: false
-//     },
-//     latitude: {
-//       type: Number,
-//       required: false
-//     }
-//   }],
-//   serviceLevel: {
-//     type: String,
-//     required: false,
-//     enum: [1, 2, 3, 4],
-//     default: null
-//   },
-//   avatar: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'File',
-//     required: false
-//   },
-//   onBoarded: {
-//     type: Boolean,
-//     default: false
-//   },
-//   verified: {
-//     type: Boolean,
-//     default: false
-//   },
-// });
-
-// // hash the password
-// userSchema.methods.generateHash = function (password) {
-//   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-// };
-
-// // checking if password is valid
-// userSchema.methods.validPassword = function (password) {
-//   return bcrypt.compareSync(password, this.password);
-// };
-
-
-// // validate user
-// userSchema.statics.validateUser = function (user) {
-//   const schema = Joi.object({
-//     username: Joi.string().min(1).max(50).required(),
-//     password: Joi.string().min(1).required(),
-//     email: Joi.string().min(4).required(),
-//     accType: Joi.string().valid('admin', 'support', 'client', 'provider').default('client').required(),
-//     firstName: Joi.string().allow(null).allow('').optional(),
-//     lastName: Joi.string().allow(null).allow('').optional(),
-//     tel: Joi.string().allow(null).allow('').optional(),
-//     location: Joi.array().items(Joi.object({
-//       address: Joi.string().allow(null).allow('').optional(),
-//       longitude: Joi.number().allow(null).allow('').optional(),
-//       latitude: Joi.number().allow(null).allow('').optional(),
-//     })),
-//     serviceLevel: Joi.number().valid(1, 2, 3, 4).allow(null).allow('').optional(),
-//     avatar: Joi.string().allow(null).allow('').optional(),
-//     onBoarded: Joi.boolean().allow(null).allow('').optional().default(false),
-//     verified: Joi.boolean().allow(null).allow('').optional().default(false),
-//   });
-//   return schema.validate(user);
-// };
-
-
-
-// validate user update
-// userSchema.statics.validateUserUpdate = function (user) {
-//   const schema = Joi.object({
-//     userId: Joi.string().hex().length(24).required(),
-//     username: Joi.string().min(1).max(50).optional(),
-//     password: Joi.string().min(1).optional(),
-//     email: Joi.string().min(4).optional(),
-//     accType: Joi.string().valid('admin', 'support', 'client', 'provider').optional(),
-//     firstName: Joi.string().allow(null).allow('').optional(),
-//     lastName: Joi.string().allow(null).allow('').optional(),
-//     tel: Joi.string().allow(null).allow('').optional(),
-//     location: Joi.array().items(Joi.object({
-//       address: Joi.string().allow(null).allow('').optional(),
-//       longitude: Joi.number().allow(null).allow('').optional(),
-//       latitude: Joi.number().allow(null).allow('').optional(),
-//     })),
-//     serviceLevel: Joi.number().valid(1, 2, 3, 4).allow(null).allow('').optional(),
-//     avatar: Joi.string().allow(null).allow('').optional(),
-//     onBoarded: Joi.boolean().allow(null).allow('').optional().default(false),
-//     verified: Joi.boolean().allow(null).allow('').optional().default(false),
-//   });
-//   return schema.validate(user);
-// };
-
-// module.exports = mongoose.model('User', userSchema);
-
-
 const User = require('../schemas/User');
 
 // Create a new user
@@ -294,17 +148,27 @@ const deleteUser = async (req, res) => {
   }
 }
 
-// get user details by username
-// Request params: username
+// get user details
+// Usecase: get user details by userId, username, or email
+// Required: userId OR username OR email
 
-const getUserByUsername = async (req, res) => {
+const getUserDetails = async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.params.username });
+    let user;
+    if (req.params.userId) {
+      user = await User.findById(req.params.userId);
+    } else if (req.params.username) {
+      user = await User.findOne({ username: req.params.username });
+    } else if (req.params.email) {
+      user = await User.findOne({ email: req.params.email });
+    }
+
     if (!user) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: 'User not found'
       });
     }
+
     const { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified } = user;
     return res.status(httpStatus.OK).json({
       user: { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified }
@@ -343,10 +207,63 @@ const getUsers = async (req, res) => {
   }
 }
 
+// login user
+// Request body: username, password
+
+const loginUser = async (req, res) => {
+  try {
+    // validate POST body with user validation schema
+    const { error } = User.validateUserLogin(req.body);
+
+    if (error) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: error.details[0].message
+      });
+    }
+
+    // check if email or username exists in the request body
+    if (!req.body.username && !req.body.email) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: 'Username or email is required'
+      });
+    }
+
+    // check if user exists
+    const user = await User.findOne({ $or: [{ username: req.body.username }, { email: req.body.email }] });
+
+    if (!user) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: 'User not found'
+      });
+    }
+
+    // check if password is valid
+    if (!user.validPassword(req.body.password)) {
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        message: 'Invalid password'
+      });
+    }
+
+    // remove sensitive information and return only non-sensitive information
+    const { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified } = user;
+
+    return res.status(httpStatus.OK).json({
+      message: 'Login successful',
+      user: { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified }
+    });
+  }
+  catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message
+    });
+  }
+}
+
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUsers,
-  getUserByUsername
+  getUserDetails,
+  loginUser
 };

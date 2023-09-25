@@ -1,4 +1,4 @@
-// Routes for Job
+// Routes for Job schema operations
 // Path: routes/Job.js
 
 const express = require('express');
@@ -8,6 +8,7 @@ const {
   createJob,
   updateJob,
   submitBid,
+  updateBid,
   getAllJobsByClient,
   getAllJobsByServiceProvider,
   getAllJobs,
@@ -40,12 +41,14 @@ Body:
 
 router.post('/createJob', createJob);
 
-/*############### Update a job ##############*/
+/*############### Update a job by client ##############*/
 
 /* 
 Update a specific job
 Request body: fields to update
-Optional fields: jobName, jobDescription, jobType, jobLocation, jobStartDate, jobEndDate, selectedBid, jobStatus, jobPrice, jobOwner
+Optional fields: jobName, jobDescription, jobType, jobLocation, jobStartDate, jobEndDate, selectedBid, 
+jobStatus (valid values: available, accepted, in-progress, completed, cancelled),
+jobPrice, jobOwner
 Example: http://localhost:3001/api/Job/updateJob
 Body:
   {
@@ -74,7 +77,7 @@ router.patch('/updateJob', updateJob);
 /*
 Submit a bid for a job
 Required fields: jobId, userId, bid
-Optional fields: bidStatus
+Optional fields: bidStatus (valid values: submitted, assigned, withdrawn)
 Example: http://localhost:3001/api/Job/submitBid
 Body:
   {
@@ -86,6 +89,23 @@ Body:
 */
 
 router.patch('/submitBid', submitBid);
+
+/*############### Update a bid for a job ##############*/
+
+/*
+Update a bid for a job
+Required fields: jobId, userId
+Optional fields: bid, bidStatus (valid values: submitted, assigned, withdrawn)
+Example: http://localhost:3001/api/Job/updateBid
+Body:
+  {
+    "jobId": "5f9f4f8c8f5c9a3c3c7c1b0b",
+    "userId": "5f9f4f8c8f5c9a3c3c7c1b0b",
+    "bidStatus": "assigned"
+  }
+*/
+
+router.patch('/updateBid', updateBid);
 
 /*############### Get all jobs by client ##############*/
 

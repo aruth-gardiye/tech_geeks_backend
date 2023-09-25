@@ -1,174 +1,3 @@
-// // MongoDB schema for Job
-// // Path: schemas/Job.js
-
-// const mongoose = require('mongoose');
-// const Schema = mongoose.Schema;
-// const Joi = require('joi');
-
-// const jobSchema = new Schema({
-//   _id: mongoose.Schema.Types.ObjectId,
-//   jobName: {
-//     type: String,
-//     required: true,
-//     unique: false,
-//     minlength: 1,
-//     trim: true
-//   },
-//   jobDescription: {
-//     type: String,
-//     required: false,
-//     minlength: 1,
-//     trim: true
-//   },
-//   jobType: {
-//     type: String,
-//     required: true,
-//     enum: ['full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship']
-//   },
-//   jobLocation: {
-//     _id: false,
-//     address: {
-//       type: String,
-//       required: false,
-//     },
-//     longitude: {
-//       type: Number,
-//       required: false
-//     },
-//     latitude: {
-//       type: Number,
-//       required: false
-//     }
-//   },
-//   jobStartDate: {
-//     type: Date,
-//     required: false,
-//     minlength: 1,
-//     trim: true
-//   },
-//   jobEndDate: {
-//     type: Date,
-//     required: false,
-//     minlength: 1,
-//     trim: true
-//   },
-//   // bids submitted by service providers
-//   jobApplicants: [{
-//     _id: false,
-//     userId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: 'User',
-//       required: true,
-//       minlength: 1,
-//     },
-//     bid: {
-//       type: Number,
-//       required: true,
-//       minlength: 1,
-//       trim: true
-//     },
-//     bidStatus: {
-//       type: String,
-//       required: false,
-//       enum: ['submitted', 'accepted', 'rejected', 'withdrawn'],
-//       default: 'submitted'
-//     }
-//   }],
-//   selectedBid: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: 'User',
-//       required: false,
-//       minlength: 1,
-//     },
-//   jobStatus: {
-//     type: String,
-//     required: true,
-//     enum: ['available', 'accepted', 'in-progress', 'completed', 'expired', 'cancelled'],
-//     default: 'available'
-//   },
-//   jobPrice: {
-//     type: Number,
-//     required: true,
-//     minlength: 1,
-//     trim: true
-//   },
-//   jobOwner: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'User',
-//     required: true,
-//     minlength: 1,
-//   },
-//   timestamps: {
-//     jobCreated: 'created_at',
-//     jobUpdated: 'updated_at'
-//   }
-// });
-
-// // validate job
-// jobSchema.statics.validateJob = function (job) {
-//   const schema = Joi.object({
-//     jobName: Joi.string().min(1).required(),
-//     jobDescription: Joi.string().min(1).optional(),
-//     jobType: Joi.string().valid('full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship').required(),
-//     jobLocation: Joi.object({
-//       address: Joi.string().min(1).optional(),
-//       longitude: Joi.number().optional(),
-//       latitude: Joi.number().optional()
-//     }).optional(),
-//     jobStartDate: Joi.date().format('YYYY-MM-DD').min('now').required(),
-//     jobEndDate: Joi.date().format('YYYY-MM-DD').min(Joi.ref('jobStartDate')).required(),
-//     jobApplicants: Joi.array().items(Joi.object({
-//       userId: Joi.string().min(1).required(),
-//       bid: Joi.number().min(1).required(),
-//       bidStatus: Joi.string().valid('submitted', 'accepted', 'rejected', 'withdrawn').required()
-//     })).optional(),
-//     jobStatus: Joi.string().valid('available', 'accepted', 'in-progress', 'completed', 'expired', 'cancelled').required(),
-//     jobPrice: Joi.number().min(1).required(),
-//     jobOwner: Joi.string().min(1).required(),
-//   });
-//   return schema.validate(job);
-// }
-
-// // validate job update by client
-// jobSchema.statics.validateJobUpdate = function (job) {
-//   const schema = Joi.object({
-//     jobId: Joi.string().hex().length(24).required(),
-//     jobName: Joi.string().min(1).optional(),
-//     jobDescription: Joi.string().min(1).optional(),
-//     jobType: Joi.string().valid('full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship').optional(),
-//     jobLocation: Joi.object({
-//       address: Joi.string().min(1).optional(),
-//       longitude: Joi.number().optional(),
-//       latitude: Joi.number().optional()
-//     }).optional(),
-//     jobStartDate: Joi.date().format('YYYY-MM-DD').min('now').optional(),
-//     jobEndDate: Joi.date().format('YYYY-MM-DD').min(Joi.ref('jobStartDate')).optional(),
-//     jobApplicants: Joi.array().items(Joi.object({
-//       userId: Joi.string().hex().length(24).required(),
-//       bid: Joi.number().min(1).required(),
-//       bidStatus: Joi.string().valid('submitted', 'accepted', 'rejected', 'withdrawn').required()
-//     })).optional(),
-//     selectedBid: Joi.string().hex().length(24).required(),
-//     jobStatus: Joi.string().valid('available', 'accepted', 'in-progress', 'completed', 'expired', 'cancelled').optional(),
-//     jobPrice: Joi.number().min(1).optional(),
-//     jobOwner: Joi.string().min(1).optional(),
-//   });
-//   return schema.validate(job);
-// }
-
-// // validate job bid and bid update by service provider
-// jobSchema.statics.validateJobUpdateByServiceProvider = function (job) {
-//   const schema = Joi.object({
-//     jobId: Joi.string().hex().length(24).required(),
-//     userId: Joi.string().hex().length(24).required(),
-//     bid: Joi.number().min(1).required(),
-//     bidStatus: Joi.string().valid('submitted', 'accepted', 'rejected', 'withdrawn').required()
-//   });
-//   return schema.validate(job);
-// }
-
-// module.exports = mongoose.model('Job', jobSchema);
-
 // Controller for the Job model
 // Path: controllers/Job.js
 
@@ -252,14 +81,79 @@ const updateJob = async (req, res) => {
       throw err;
     }
 
-    // if selectedBid is passed in, check if userId is in jobApplicants and update jobStatus and selectedBid
+    // if jobPrice is updated, and new jobPrice is higher than old jobPrice, make higher bids stale
+    if (value.jobPrice && value.jobPrice !== job.jobPrice) {
+      const jobApplicants = job.jobApplicants;
+      jobApplicants.forEach((applicant) => {
+        if (applicant.bid > value.jobPrice && !['assigned', 'rejected', 'withdrawn'].includes(applicant.bidStatus)) {
+          applicant.bidStatus = 'stale';
+        }
+      });
+
+    // if jobPrice is updated, and new jobPrice is lower than old jobPrice, make lower bids submitted
+    } else if (value.jobPrice && value.jobPrice < job.jobPrice) {
+      const jobApplicants = job.jobApplicants;
+      jobApplicants.forEach((applicant) => {
+        if (applicant.bid > value.jobPrice && !['assigned', 'rejected', 'withdrawn'].includes(applicant.bidStatus)) {
+          applicant.bidStatus = 'submitted';
+        }
+      });
+    }
+
     if (value.selectedBid) {
+
+      // check if job status is available, accepted, else throw error
+      if (!['available', 'accepted'].includes(job.jobStatus)) {
+        const err = new Error(`Cannot select bid as job is ${job.jobStatus}`);
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+
+      // check if userId is in jobApplicants and update jobStatus and selectedBid
       const userId = value.selectedBid;
       const jobApplicants = job.jobApplicants;
       const userIds = jobApplicants.map((applicant) => applicant.userId.toString());
+
       if (userIds.includes(userId)) {
-        // find bid in jobApplicants and update bidStatus to accepted
+
         const bid = jobApplicants.find((applicant) => applicant.userId.toString() === userId);
+
+        // if assigned bid exists, throw error
+        if (bid.bidStatus === 'assigned') {
+          const err = new Error('Cannot change as assigned bid exists');
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+        }
+
+        // if bid is stale, throw error
+        if (bid.bidStatus === 'stale') {
+          const err = new Error('Bid is stale');
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+        }
+
+        // if bid is withdrawn, throw error
+        if (bid.bidStatus === 'withdrawn') {
+          const err = new Error('Cannot accept withdrawn bid');
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+        }
+
+        // if new jobPrice is passed in, check if bid is higher than new jobPrice
+        if (value.jobPrice && bid.bid > value.jobPrice) {
+          const err = new Error('Bid is higher than job price');
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+        }
+
+        // if already accepted bid exists, make it submitted
+        const selectedBid = job.selectedBid;
+        if (selectedBid) {
+          const selectedBidIndex = jobApplicants.findIndex((applicant) => applicant.userId.toString() === selectedBid.toString());
+          jobApplicants[selectedBidIndex].bidStatus = 'submitted';
+        }
+
+        // find bid in jobApplicants and update bidStatus to accepted
         bid.bidStatus = 'accepted';
         job.jobStatus = 'accepted';
         job.selectedBid = value.selectedBid;
@@ -268,6 +162,40 @@ const updateJob = async (req, res) => {
         err.status = httpStatus.BAD_REQUEST;
         throw err;
       }
+    }
+
+    // if jobStatus is updated to in-progress, check if selectedBid exists and update bidStatus to assigned
+    if (value.jobStatus === 'in-progress') {
+      const selectedBid = job.selectedBid;
+      if (!selectedBid) {
+        const err = new Error('Cannot update job status to in-progress as no bid is selected');
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+      const jobApplicants = job.jobApplicants;
+      const selectedBidIndex = jobApplicants.findIndex((applicant) => applicant.userId.toString() === selectedBid.toString());
+      jobApplicants[selectedBidIndex].bidStatus = 'assigned';
+      job.jobStatus = 'in-progress';
+    }
+
+    // if jobStatus is updated to completed, check if job is in-progress and update jobStatus to completed
+    if (value.jobStatus === 'completed') {
+      if (job.jobStatus !== 'in-progress') {
+        const err = new Error('Cannot update job status to completed as job is not in-progress');
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+      job.jobStatus = 'completed';
+    }
+
+    // if jobStatus is updated to cancelled, check if job is available and update jobStatus to cancelled
+    if (value.jobStatus === 'cancelled') {
+      if (['in-progress', 'completed', 'cancelled', 'expired'].includes(job.jobStatus)) {
+        const err = new Error(`Cannot update job status to cancelled as job is ${job.jobStatus}`);
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+      job.jobStatus = 'cancelled';
     }
 
     // update job
@@ -296,11 +224,10 @@ const updateJob = async (req, res) => {
   }
 }
 
-// submit bid or update bid for job by service provider
-// Usecase: service provider submits a bid for a job
+// submit new bid for job by service provider
+// Usecase: service provider submits a new bid for a job
 // Required: jobId, userId, bid
 // Optional: bidStatus
-
 const submitBid = async (req, res) => {
   try {
     const { error, value } = Job.validateJobUpdateByServiceProvider(req.body);
@@ -319,7 +246,7 @@ const submitBid = async (req, res) => {
     }
 
     // check if user exists
-    const user = await User.findOne({ _id: id });
+    const user = await User.findOne({ _id: value.userId });
     if (!user) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: 'User not found'
@@ -327,7 +254,7 @@ const submitBid = async (req, res) => {
     }
 
     // check if bid is less than jobPrice
-    if (value.bid > job.jobPrice) {
+    if (value.bid && value.bid > job.jobPrice) {
       const err = new Error('Bid is higher than job price');
       err.status = httpStatus.BAD_REQUEST;
       throw err;
@@ -338,28 +265,156 @@ const submitBid = async (req, res) => {
     const userIds = jobApplicants.map((applicant) => applicant.userId.toString());
 
     if (userIds.includes(value.userId)) {
-
-      // update bid
-      const bid = jobApplicants.find((applicant) => applicant.userId.toString() === value.userId);
-      bid.bid = value.bid;
-      bid.bidStatus = value.bidStatus || bid.bidStatus;
-
-    } else {
-
-      // add bid
-      job.jobApplicants.push({
-        userId: value.userId,
-        bid: value.bid,
-        bidStatus: value.bidStatus || 'submitted'
-      });
-
+      const err = new Error('Bid already submitted, please update bid');
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
     }
+
+    // check if job status is available or accepted
+    if (!['available', 'accepted'].includes(job.jobStatus)) {
+      const err = new Error(`Cannot submit bid as job is ${job.jobStatus}`);
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
+    }
+
+    //check if bid is passed in
+    if (!value.bid) {
+      const err = new Error('Bid is required');
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
+    }
+
+    // add bid
+    job.jobApplicants.push({
+      userId: value.userId,
+      bid: value.bid,
+      bidStatus: value.bidStatus || 'submitted'
+    });
 
     // save job
     const updatedJob = await job.save();
 
     res.status(httpStatus.OK).json({
       message: `Bid ${value.bidStatus || 'submitted'} successfully`,
+    });
+  }
+  catch (err) {
+    res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err.message
+    });
+  }
+}
+
+// update bid for job by service provider
+// Usecase: service provider updates an existing bid for a job
+// Required: jobId, userId, bid
+// Optional: bidStatus
+const updateBid = async (req, res) => {
+  try {
+    const { error, value } = Job.validateJobUpdateByServiceProvider(req.body);
+    if (error) {
+      const err = new Error(error.details[0].message);
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
+    }
+
+    // check if bid or bidStatus is passed in
+    if (!value.bid && !value.bidStatus) {
+      const err = new Error('bid or bidStatus is required');
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
+    }
+
+    // check if job exists
+    const job = await Job.findById(value.jobId);
+    if (!job) {
+      const err = new Error('Job not found');
+      err.status = httpStatus.NOT_FOUND;
+      throw err;
+    }
+
+    // check if user exists
+    const user = await User.findOne({ _id: value.userId });
+    if (!user) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: 'User not found'
+      });
+    }
+
+    // check if bid is already submitted
+    const jobApplicants = job.jobApplicants;
+    const userIds = jobApplicants.map((applicant) => applicant.userId.toString());
+
+    if (!userIds.includes(value.userId)) {
+      const err = new Error('Bid not submitted, please submit bid');
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
+    }
+
+    const bid = jobApplicants.find((applicant) => applicant.userId.toString() === value.userId);
+
+    // if bid status is accepted, assigned, rejected or stale, throw error when bid is updated
+    if (value.bid && !['accepted', 'assigned', 'rejected', 'stale'].includes(bid.bidStatus)) {
+
+      // check if bid is less than jobPrice
+      if (value.bid && value.bid > job.jobPrice) {
+        const err = new Error('Bid is higher than job price');
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+
+      bid.bid = value.bid;
+
+    } else if (value.bid && value.bid != bid.bid && ['accepted', 'assigned', 'rejected', 'stale'].includes(bid.bidStatus)) {
+      const err = new Error(`Cannot update bid due to bid is ${bid.bidStatus}`);
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
+    }
+
+    // if bidder opted to be assigned, check if job status is accepted by client
+    if (value.bidStatus === 'assigned') {
+      if (job.jobStatus !== 'accepted') {
+
+        let err;
+
+        // create error based on job status and selectedBid
+        if (job.jobStatus !== 'accepted') {
+          err = new Error(`Cannot assign bid as job is ${job.jobStatus}`);
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+
+        } else if (job.selectedBid !== value.userId) {
+          err = new Error('Cannot assign bid as accepted bid is not submitted by bidder');
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+        }
+
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+
+      bid.bidStatus = "assigned"
+      job.jobStatus = "assigned"
+      
+    }
+
+    // if bidder opted to be withdrawn, check if job status is available or accepted
+    if (value.bidStatus === 'withdrawn') {
+      if (!['available', 'accepted', 'assigned'].includes(job.jobStatus)) {
+        const err = new Error(`Cannot withdraw bid as job is ${job.jobStatus}`);
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+
+      bid.bidStatus = "withdrawn"
+      job.jobStatus = "available"
+    }
+
+    // save job
+    const updatedJob = await job.save();
+
+    res.status(httpStatus.OK).json({
+      message: `Bid updated successfully`,
     });
   }
   catch (err) {
@@ -391,9 +446,34 @@ const getAllJobsByClient = async (req, res) => {
       .populate('jobOwner', '_id username firstName lastName')
       .populate('selectedBid', '_id username firstName lastName');
 
+    // sort jobApplicants array for each job
+    jobs.forEach((job) => {
+      job.sortJobApplicantsByBid();
+    });
+
+    // transform jobApplicants array to include username, firstName and lastName
+    const jobApplicants = jobs.map((job) => {
+      return job.jobApplicants.map((applicant) => {
+        const { _id, username, firstName, lastName } = applicant.userId;
+        return {
+          userId: _id.toString(),
+          username,
+          firstName,
+          lastName,
+          bid: applicant.bid,
+          bidStatus: applicant.bidStatus
+        };
+      });
+    });
+
     // return jobs
     res.status(httpStatus.OK).json({
-      jobs
+      jobs: jobs.map((job, index) => {
+        return {
+          ...job.toObject(),
+          jobApplicants: jobApplicants[index]
+        };
+      })
     });
 
   } catch (error) {
@@ -412,7 +492,7 @@ const getAllJobsByServiceProvider = async (req, res) => {
     const userId = req.params.userId;
 
     // check if user exists
-    const user = await User.findOne({ _id: id });
+    const user = await User.findOne({ _id: userId });
     if (!user) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: 'User not found'
@@ -425,9 +505,34 @@ const getAllJobsByServiceProvider = async (req, res) => {
       .populate('jobOwner', '_id username firstName lastName')
       .populate('selectedBid', '_id username firstName lastName');
 
+    // sort jobApplicants array for each job
+    jobs.forEach((job) => {
+      job.sortJobApplicantsByBid();
+    });
+
+    // transform jobApplicants array to include username, firstName and lastName
+    const jobApplicants = jobs.map((job) => {
+      return job.jobApplicants.map((applicant) => {
+        const { _id, username, firstName, lastName } = applicant.userId;
+        return {
+          userId: _id.toString(),
+          username,
+          firstName,
+          lastName,
+          bid: applicant.bid,
+          bidStatus: applicant.bidStatus
+        };
+      });
+    });
+
     // return jobs
     res.status(httpStatus.OK).json({
-      jobs
+      jobs: jobs.map((job, index) => {
+        return {
+          ...job.toObject(),
+          jobApplicants: jobApplicants[index]
+        };
+      })
     });
   } catch (error) {
     res.status(error.status || httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -449,9 +554,34 @@ const getAllJobs = async (req, res) => {
       .populate('jobOwner', '_id userId username firstName lastName')
       .populate('selectedBid', '_id username firstName lastName');
 
+    // sort jobApplicants array for each job
+    jobs.forEach((job) => {
+      job.sortJobApplicantsByBid();
+    });
+
+    // transform jobApplicants array to include username, firstName and lastName
+    const jobApplicants = jobs.map((job) => {
+      return job.jobApplicants.map((applicant) => {
+        const { _id, username, firstName, lastName } = applicant.userId;
+        return {
+          userId: _id.toString(),
+          username,
+          firstName,
+          lastName,
+          bid: applicant.bid,
+          bidStatus: applicant.bidStatus
+        };
+      });
+    });
+
     // return jobs
     res.status(httpStatus.OK).json({
-      jobs
+      jobs: jobs.map((job, index) => {
+        return {
+          ...job.toObject(),
+          jobApplicants: jobApplicants[index]
+        };
+      })
     });
   } catch (error) {
     res.status(error.status || httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -480,9 +610,26 @@ const getJobById = async (req, res) => {
       throw error;
     }
 
-    // return job
+    job.sortJobApplicantsByBid();
+
+    // transform jobApplicants array to include username, firstName and lastName
+    const jobApplicants = job.jobApplicants.map((applicant) => {
+      const { _id, username, firstName, lastName } = applicant.userId;
+      return {
+        userId: _id.toString(),
+        username,
+        firstName,
+        lastName,
+        bid: applicant.bid,
+        bidStatus: applicant.bidStatus
+      };
+    });
+
     res.status(httpStatus.OK).json({
-      job
+      job: {
+        ...job.toObject(),
+        jobApplicants
+      }
     });
   } catch (error) {
     res.status(error.status || httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -525,6 +672,7 @@ module.exports = {
   createJob,
   updateJob,
   submitBid,
+  updateBid,
   getAllJobsByClient,
   getAllJobsByServiceProvider,
   getAllJobs,

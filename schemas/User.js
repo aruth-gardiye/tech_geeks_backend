@@ -140,4 +140,14 @@ userSchema.statics.validateUserUpdate = function (user) {
   return schema.validate(user);
 };
 
+// validate user login
+userSchema.statics.validateUserLogin = function (user) {
+  const schema = Joi.object({
+    username: Joi.string().min(1).max(50).optional(),
+    email: Joi.string().email().min(4).optional(),
+    password: Joi.string().min(1).required(),
+  });
+  return schema.validate(user);
+};
+
 module.exports = mongoose.model('User', userSchema);
