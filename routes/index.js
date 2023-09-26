@@ -12,25 +12,70 @@ files
         }
     })
 
-// print all available routes
-router.get('/routes', (req, res) => {
-    const routes = [];
-    const availableRoutes = router.stack
-        .filter(r => r.route)
-        .map(r => {
-            const method = r.route.stack[0].method;
-            const path = r.route.path;
-            return {
-                method: method.toUpperCase(),
-                path
-            };
-        });
-    availableRoutes.forEach(route => {
-        routes.push(`${route.method} ${route.path}`);
-    });
-    res.status(200).json({
-        routes
-    });
+// if user access /, redirect to /api
+router.get('/', (req, res) => {
+  res.redirect('/api');
+});
+
+// if user access /api, display links to root routes
+const welcomeMessage = `
+  <pre style="font-family: monospace;">
+   _____         _      ____           _        
+  |_   _|__  ___| |__  / ___| ___  ___| | __ __ 
+    | |/ _ \\/ __| '_ \\| |  _ / _ \\/ _ \\ |/ / __|
+    | |  __/ (__| | | | |_| |  __/  __/   <\\__ \\
+    |_|\\___|\\___|_| |_|\\____|\\___|\\___|_|\\_\\___/
+  
+  </pre>
+`;
+
+router.get('/api', (req, res) => {
+  const routes = [];
+
+  // User routes
+  routes.push({
+    path: '/api/User',
+    description: 'User routes'
+  });
+
+  // Job routes
+  routes.push({
+    path: '/api/Job',
+    description: 'Job routes'
+  });
+
+  // Helper routes
+  routes.push({
+    path: '/api/Helper',
+    description: 'Helper routes'
+  });
+
+  const formatted_routes = routes.map(route => {
+    return `<li><a href="${route.path}">${route.path}</a> - ${route.description}</li>`;
+  }).join('\n');
+
+  const html = `
+    <html>
+      <head>
+        <title>Welcome to the TechGeeks API</title>
+      </head>
+      <body>
+        <div style="text-align: center;">
+          <h2 style="font-family: monospace;">
+          Welcome to the API of</h2>
+          ${welcomeMessage}
+          <h3 style="font-family: monospace;>
+          Available Routes</h3>
+          <ul style="font-family: monospace;list-style-type:none;">
+            ${formatted_routes}
+          </ul>
+        </div>
+      </body>
+    </html>
+  `;
+
+  res.set('Content-Type', 'text/html');
+  res.status(200).send(html);
 });
 
 module.exports = router;

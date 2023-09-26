@@ -16,7 +16,7 @@ const {
 /* 
 Gets coordinates from address
 Required params: address
-Example: http://localhost:3001/api/Helper/getCordsFromAddress/?address=20 Seaview Street, Byron Bay
+Example: https://techgeeksprotobackend.azurewebsites.net/api/Helper/getCordsFromAddress/?address=20 Seaview Street, Byron Bay
 */
 
 router.get('/getCordsFromAddress', async (req, res) => {
@@ -38,7 +38,7 @@ router.get('/getCordsFromAddress', async (req, res) => {
 /*
 Gets address from coordinates
 Required params: longitude, latitude (?longitude=...&latitude=...)
-Example: http://localhost:3001/api/Helper/getAddressfromCords/?longitude=153.616961&latitude=-28.652513
+Example: https://techgeeksprotobackend.azurewebsites.net/api/Helper/getAddressfromCords/?longitude=153.616961&latitude=-28.652513
 */
 router.get('/getAddressfromCords', async (req, res) => {
     const {longitude, latitude} = req.query;
@@ -60,7 +60,7 @@ router.get('/getAddressfromCords', async (req, res) => {
 /*
 Gets search results from address
 Required params: address
-Example: http://localhost:3001/api/Helper/getSearchResults/?address=20 Seaview Street, Byron Bay
+Example: https://techgeeksprotobackend.azurewebsites.net/api/Helper/getSearchResults/?address=20 Seaview Street, Byron Bay
 */
 router.get('/getSearchResults', async (req, res) => {
     const address = req.query.address;
@@ -74,6 +74,58 @@ router.get('/getSearchResults', async (req, res) => {
         error: error
       });
     }
+});
+
+
+/*############### Display available routes in Helper ##############*/
+
+/*
+Display available routes in Helper
+*/
+
+router.get('/', (req, res) => {
+    const url = new URL(req.originalUrl, `${req.headers['x-forwarded-proto']}://${req.headers.host}`);
+    const baseUrl = `${req.protocol}://${req.hostname}${url.port ? `:${url.port}` : ''}${req.baseUrl}`;
+    const available_routes = [
+        {
+            path: '/getCordsFromAddress',
+            method: 'GET',
+            description: 'Get coordinates from address',
+            requiredParams: ['address'],
+            example: {
+                url: `${baseUrl}/getCordsFromAddress/?address=20 Seaview Street, Byron Bay`
+            }
+        },
+        {
+            path: '/getAddressfromCords',
+            method: 'GET',
+            description: 'Get address from coordinates',
+            requiredParams: ['longitude', 'latitude'],
+            example: {
+                url: `${baseUrl}/getAddressfromCords/?longitude=153.616961&latitude=-28.652513`
+            }
+        },
+        {
+            path: '/getSearchResults',
+            method: 'GET',
+            description: 'Get search results from address',
+            requiredParams: ['address'],
+            example: {
+                url: `${baseUrl}/getSearchResults/?address=20 Seaview Street, Byron Bay`
+            }
+        }
+    ];
+
+    const formatted_routes = available_routes.map(route => {
+      const requiredParams = route.requiredParams ? `Required fields: ${route.requiredParams.join(', ')}` : '';
+      const example = route.example ? `Example: ${JSON.stringify(route.example, null, 2)}` : '';
+      const divider = `\n#############################################\n`
+  
+      return `${divider}Endpoint: ${route.path}\nUsage: ${route.description}\nMethod: ${route.method}\n${requiredParams}\n${example ? example : ''}\n`;
+    }).join('\n');
+  
+    res.set('Content-Type', 'text/plain');
+    res.status(200).send(`API endpoints for Helper\n${formatted_routes}`);
 });
 
 module.exports = router;

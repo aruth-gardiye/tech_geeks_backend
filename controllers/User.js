@@ -259,11 +259,142 @@ const loginUser = async (req, res) => {
   }
 }
 
+// check if username exists
+// Request query: username
+
+const checkUsername = async (req, res) => {
+  try {
+    const username = req.query.username;
+    if (!username) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: 'Username is required'
+      });
+    }
+
+    return res.status(httpStatus.OK).json({
+      message: 'Username is available'
+    });
+  }
+  catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message
+    });
+  }
+}
+
+// check if email exists
+// Request query: email
+
+const checkEmail = async (req, res) => {
+  try {
+    const email = req.query.email;
+    if (!email) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: 'Email is required'
+      });
+    }
+
+    return res.status(httpStatus.OK).json({
+      message: 'Email is available'
+    });
+  }
+  catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message
+    });
+  }
+}
+
+// make user onboarding complete
+// Request body: userId
+
+const onBoardUser = async (req, res) => {
+  try {
+    // check if object id is valid if then convert to object id
+    if (!mongoose.isValidObjectId(req.body.userId)) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: 'Invalid user id'
+      });
+    }
+
+    const id = new mongoose.Types.ObjectId(req.body.userId);
+
+    // check if user exists
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: 'User not found'
+      });
+    }
+
+    // update 'onBoarded' field to true
+    user.onBoarded = true;
+
+    // save user
+    await user.save();
+
+    return res.status(httpStatus.OK).json({
+      message: 'User onboarding complete'
+    });
+  }
+
+  catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message
+    });
+  }
+}
+
+// make user verification complete
+// Request body: userId
+
+const verifyUser = async (req, res) => {
+  try {
+    // check if object id is valid if then convert to object id
+    if (!mongoose.isValidObjectId(req.body.userId)) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: 'Invalid user id'
+      });
+    }
+
+    const id = new mongoose.Types.ObjectId(req.body.userId);
+
+    // check if user exists
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: 'User not found'
+      });
+    }
+
+    // update 'verified' field to true
+    user.verified = true;
+
+    // save user
+    await user.save();
+
+    return res.status(httpStatus.OK).json({
+      message: 'User verification complete'
+    });
+  }
+
+  catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message
+    });
+  }
+}
+
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUsers,
   getUserDetails,
-  loginUser
+  loginUser,
+  checkUsername,
+  checkEmail,
+  onBoardUser,
+  verifyUser
 };

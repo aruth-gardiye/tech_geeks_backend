@@ -10,7 +10,9 @@ const {
   deleteUser,
   getUsers,
   getUserDetails,
-  loginUser
+  loginUser,
+  onBoardUser,
+  verifyUser,
 } = require('../controllers/User');
 
 /*############### Create a new user ##############*/
@@ -20,7 +22,7 @@ Create a new user
 Request body: user details
 Required fields: username, email, password, accType
 Optional fields: firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified
-Example: http://localhost:3001/api/User/createUser
+Example: https://techgeeksprotobackend.azurewebsites.net/api/User/createUser
 Body: 
   {
     "username": "johndoeclient",
@@ -50,7 +52,7 @@ Update a specific user
 Request body: fields to update
 Required fields: userId
 Optional fields: username, email, password, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified
-Example: http://localhost:3001/api/User/updateUser
+Example: https://techgeeksprotobackend.azurewebsites.net/api/User/updateUser
 Body:
 {
   "userId": "5f9f4f8c8f5c9a3c3c7c1b0b",
@@ -83,7 +85,7 @@ router.patch('/updateUser', updateUser);
 Delete a specific user
 Request Body: userId
 Required fields: userId
-Example: http://localhost:3001/api/User/deleteUser
+Example: https://techgeeksprotobackend.azurewebsites.net/api/User/deleteUser
 Body:
 {
   "userId": "5f9f4f8c8f5c9a3c3c7c1b0b"
@@ -99,7 +101,7 @@ router.delete('/deleteUser', deleteUser);
 Get all users
 Request params: none
 Required params: none
-Example: http://localhost:3001/api/User/getUsers
+Example: https://techgeeksprotobackend.azurewebsites.net/api/User/getUsers
 */
 
 router.get('/getUsers', getUsers);
@@ -112,9 +114,9 @@ Get user details by userId OR username OR email
 Request params: userId OR username OR email
 Required params: userId OR username OR email
 Example: 
-  http://localhost:3001/api/User/getUserDetails/userId/5f9f4f8c8f5c9a3c3c7c1b0b
-  http://localhost:3001/api/User/getUserDetails/username/johndoeclient
-  http://localhost:3001/api/User/getUserDetails/email/johndoe@gmail
+  https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/userId/5f9f4f8c8f5c9a3c3c7c1b0b
+  https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/username/johndoeclient
+  https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/email/johndoe@gmail
 */
 
 router.get('/getUserDetails/userId/:userId', getUserDetails);
@@ -128,7 +130,7 @@ router.get('/getUserDetails/email/:email', getUserDetails);
 Login user
 Request body: username or email, password
 Required fields: username or email, password
-Example: http://localhost:3001/api/User/loginUser
+Example: https://techgeeksprotobackend.azurewebsites.net/api/User/loginUser
 Body:
 {
   "username": "johndoeclient",
@@ -136,5 +138,204 @@ Body:
 }
 */
 router.post('/login', loginUser);
+
+
+/*############### Onboard user ##############*/
+
+/*
+Onboard user
+Request body: userId
+Required fields: userId
+Example: https://techgeeksprotobackend.azurewebsites.net/api/User/onBoardUser
+Body:
+{
+  "userId": "5f9f4f8c8f5c9a3c3c7c1b0b"
+}
+*/
+
+router.patch('/onBoardUser', onBoardUser);
+
+
+/*############### Verify user ##############*/
+
+/*
+Verify user
+Request body: userId
+Required fields: userId
+Example: https://techgeeksprotobackend.azurewebsites.net/api/User/verifyUser
+Body:
+{
+  "userId": "5f9f4f8c8f5c9a3c3c7c1b0b"
+}
+*/
+
+router.patch('/verifyUser', verifyUser);
+
+
+/*############### Display available routes in User ##############*/
+
+/*
+Display available routes in User
+*/
+
+router.get('/', (req, res) => {
+  const url = new URL(req.originalUrl, `${req.headers['x-forwarded-proto']}://${req.headers.host}`);
+  const baseUrl = `${req.protocol}://${req.hostname}${url.port ? `:${url.port}` : ''}${req.baseUrl}`;
+  const available_routes = [
+    {
+      path: '/createUser',
+      method: 'POST',
+      description: 'Create a new user',
+      requiredFields: ['username', 'email', 'password', 'accType'],
+      optionalFields: ['firstName', 'lastName', 'tel', 'location', 'serviceLevel', 'avatar', 'onBoarded', 'verified'],
+      example: {
+        url: `${baseUrl}/createUser`,
+        body: {
+          username: 'johndoeclient',
+          password: 'password',
+          email: 'johndoe@gmail',
+          accType: 'client',
+          firstName: 'John',
+          lastName: 'Doe',
+          tel: '0412345678',
+          location: [
+            {
+              address: '20 Seaview Street, Byron Bay',
+              longitude: 153.616961,
+              latitude: -28.652513
+            }
+          ]
+        }
+      }
+    },
+    {
+      path: '/updateUser',
+      method: 'PATCH',
+      description: 'Update a specific user',
+      requiredFields: ['userId'],
+      optionalFields: ['username', 'email', 'password', 'accType', 'firstName', 'lastName', 'tel', 'location', 'serviceLevel', 'avatar', 'onBoarded', 'verified'],
+      example: {
+        url: `${baseUrl}/updateUser`,
+        body: {
+          userId: '5f9f4f8c8f5c9a3c3c7c1b0b',
+          username: 'johndoeclient',
+          password: 'password',
+          email: 'johndoe@gmail',
+          accType: 'client',
+          firstName: 'John',
+          lastName: 'Doe',
+          tel: '0412345678',
+          location: [
+            {
+              address: '20 Seaview Street, Byron Bay',
+              longitude: 153.616961,
+              latitude: -28.652513
+            }
+          ],
+          serviceLevel: 1,
+          avatar: '5d2a3c4d5f6a7b8c9d0e1f2',
+          onBoarded: true,
+          verified: true
+        }
+      }
+    },
+    {
+      path: '/deleteUser',
+      method: 'DELETE',
+      description: 'Delete a specific user',
+      requiredFields: ['userId'],
+      example: {
+        url: `${baseUrl}/deleteUser`,
+        body: {
+          userId: '5f9f4f8c8f5c9a3c3c7c1b0b'
+        }
+      }
+    },
+    {
+      path: '/getUsers',
+      method: 'GET',
+      description: 'Get all users',
+      example: {
+        url: `${baseUrl}/getUsers`
+      }
+    },
+    {
+      path: '/getUserDetails/userId/:userId',
+      method: 'GET',
+      description: 'Get user details by userId',
+      requiredFields: ['userId'],
+      example: {
+        url: `${baseUrl}/getUserDetails/userId/5f9f4f8c8f5c9a3c3c7c1b0b`
+      }
+    },
+    {
+      path: '/getUserDetails/username/:username',
+      method: 'GET',
+      description: 'Get user details by username',
+      requiredFields: ['username'],
+      example: {
+        url: `${baseUrl}/getUserDetails/username/johndoeclient`
+      }
+    },
+    {
+      path: '/getUserDetails/email/:email',
+      method: 'GET',
+      description: 'Get user details by email',
+      requiredFields: ['email'],
+      example: {
+        url: `${baseUrl}/getUserDetails/email/johndoe@gmail`
+      }
+    },
+    {
+      path: '/login',
+      method: 'POST',
+      description: 'Login user',
+      requiredFields: ['username or email', 'password'],
+      example: {
+        url: `${baseUrl}/login`,
+        body: {
+          username: 'johndoeclient',
+          password: 'password'
+        }
+      }
+    },
+    {
+      path: '/onBoardUser',
+      method: 'PATCH',
+      description: 'Onboard user',
+      requiredFields: ['userId'],
+      example: {
+        url: `${baseUrl}/onBoardUser`,
+        body: {
+          userId: '5f9f4f8c8f5c9a3c3c7c1b0b'
+        }
+      }
+    },
+    {
+      path: '/verifyUser',
+      method: 'PATCH',
+      description: 'Verify user',
+      requiredFields: ['userId'],
+      example: {
+        url: `${baseUrl}/verifyUser`,
+        body: {
+          userId: '5f9f4f8c8f5c9a3c3c7c1b0b'
+        }
+      }
+    }
+  ];
+
+  const formatted_routes = available_routes.map(route => {
+    const requiredFields = route.requiredFields ? `Required fields: ${route.requiredFields.join(', ')}` : '';
+    const optionalFields = route.optionalFields ? `Optional fields: ${route.optionalFields.join(', ')}` : '';
+    const example = route.example ? `Example: ${JSON.stringify(route.example, null, 2)}` : '';
+    const divider = `\n#############################################\n`
+
+    return `${divider}Endpoint: ${route.path}\nUsage: ${route.description}\nMethod: ${route.method}\n${requiredFields}\n${optionalFields ? optionalFields + `\n` : ''}${example ? example : ''}\n`;
+  }).join('\n');
+
+  res.set('Content-Type', 'text/plain');
+  res.status(200).send(`API endpoints for User\n${formatted_routes}`);
+});
 
 module.exports = router;

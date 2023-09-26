@@ -60,6 +60,9 @@ mongoose.connect(process.env.MDB_URI, { useNewUrlParser: true, useUnifiedTopolog
 // start server
 const port = process.env.PORT || 3001;
 
+// enable trust proxy
+app.enable('trust proxy');
+
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
 module.exports = app;

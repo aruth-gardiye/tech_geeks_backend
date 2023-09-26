@@ -34,7 +34,7 @@
 
 # Job API Documentation
 
-## Create a New Job
+## Create a New Job by Client
 
 **Route**: `/api/Job/createJob`
 
@@ -52,7 +52,7 @@ The request body should contain the following required fields:
 
 -  `jobDescription` (string): A brief description of the job.
 
--  `jobType` (string): The type of job (e.g., "full-time", "part-time", etc.).
+-  `jobType` (string): The type of job (valid values: "full-time", "part-time", "casual", "contract", "temporary", "internship").
 
 -  `jobLocation` (object): The location of the job, including an address, longitude, and latitude.
 
@@ -60,9 +60,9 @@ The request body should contain the following required fields:
 
 -  `jobEndDate` (string): The end date of the job in the format "YYYY-MM-DD".
 
--  `jobStatus` (string): The status of the job (e.g., "available", "closed", etc.).
+-  `jobStatus` (string): The status of the job (valid values: "available," "accepted," "in-progress,", "completed," "cancelled").
 
--  `jobPrice` (number): The price or compensation for the job.
+-  `jobPrice` (number): The price or compensation for the job. (Hourly rate)
 
 -  `jobOwner` (string): The ID of the job owner.
 

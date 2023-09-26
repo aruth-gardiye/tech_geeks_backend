@@ -213,3 +213,51 @@ The request body should contain the following required fields:
 }
 ```
 
+## Onboard User
+
+**Route**: `/api/User/onBoardUser`
+
+**HTTP Method**: `PATCH`
+
+### Description
+
+Update the onboarding status of a user identified by their unique user ID.
+
+### Request Body
+
+The request body should contain the following required fields:
+
+- `userId` (string): The ID of the user you want to update.
+
+### Example Request Body
+
+```json
+{
+  "userId": "5f9f4f8c8f5c9a3c3c7c1b0b"
+}
+```
+
+## Verify User
+
+**Route**: `/api/User/verifyUser`
+
+**HTTP Method**: `PATCH`
+
+### Description
+
+Update the verification status of a user identified by their unique user ID.
+
+### Request Body
+
+The request body should contain the following required fields:
+
+- `userId` (string): The ID of the user you want to update.
+
+### Example Request Body
+
+```json
+{
+  "userId": "5f9f4f8c8f5c9a3c3c7c1b0b"
+}
+```
+
