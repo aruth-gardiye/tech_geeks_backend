@@ -41,6 +41,50 @@ const jobSchema = new Schema(
         required: false
       }
     },
+    // can be hours, days, weeks, months, years. Only integers allowed
+    jobDuration: {
+        _id: false,
+        hours : {
+          type: Number,
+          required: false,
+          min: 0,
+          max: 23,
+          validate: {
+            validator: Number.isInteger,
+            message: '{VALUE} is not an integer value'
+          }
+        },
+        days : {
+          type: Number,
+          required: false,
+          min: 0,
+          max: 31,
+          validate: {
+            validator: Number.isInteger,
+            message: '{VALUE} is not an integer value'
+          }
+        },
+        months : {
+          type: Number,
+          required: false,
+          min: 0,
+          max: 11,
+          validate: {
+            validator: Number.isInteger,
+            message: '{VALUE} is not an integer value'
+          }
+        },
+        years : {
+          type: Number,
+          required: false,
+          min: 0,
+          max: 10,
+          validate: {
+            validator: Number.isInteger,
+            message: '{VALUE} is not an integer value'
+          }
+        }
+    },
     jobStartDate: {
       type: Date,
       required: false,
@@ -101,6 +145,9 @@ const jobSchema = new Schema(
     },
   }, 
   {
+    retainKeyOrder: true
+  },
+  {
     timestamps: {
       createdAt: 'jobCreated',
       updatedAt: 'jobUpdated'
@@ -123,6 +170,12 @@ jobSchema.statics.validateJob = function (job) {
       address: Joi.string().min(1).optional(),
       longitude: Joi.number().optional(),
       latitude: Joi.number().optional()
+    }).optional(),
+    jobDuration: Joi.object({
+      hours : Joi.number().integer().min(0).max(23).optional(),
+      days : Joi.number().integer().min(0).max(31).optional(),
+      months : Joi.number().integer().min(0).max(11).optional(),
+      years : Joi.number().integer().min(0).max(10).optional()
     }).optional(),
     jobStartDate: Joi.date().format('YYYY-MM-DD').min(moment().startOf('day')).required(),
     jobEndDate: Joi.date().format('YYYY-MM-DD').min(Joi.ref('jobStartDate')).required(),
@@ -149,6 +202,12 @@ jobSchema.statics.validateJobUpdate = function (job) {
       address: Joi.string().min(1).optional(),
       longitude: Joi.number().optional(),
       latitude: Joi.number().optional()
+    }).optional(),
+    jobDuration: Joi.object({
+      hours : Joi.number().integer().min(0).max(23).optional(),
+      days : Joi.number().integer().min(0).max(31).optional(),
+      months : Joi.number().integer().min(0).max(11).optional(),
+      years : Joi.number().integer().min(0).max(10).optional()
     }).optional(),
     jobStartDate: Joi.date().format('YYYY-MM-DD').optional(),
     jobEndDate: Joi.date().format('YYYY-MM-DD').min(Joi.ref('jobStartDate')).optional(),

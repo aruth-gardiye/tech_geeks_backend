@@ -17,6 +17,11 @@ router.get('/', (req, res) => {
   res.redirect('/api');
 });
 
+// route to serve postman collection ('TechGeeks Backend.postman_collection') resided in docs folder
+router.get('/api/postman', (req, res) => {
+  res.download('TechGeeks Backend.postman_collection.json', { root: __dirname + '/../docs/' });
+});
+
 // if user access /api, display links to root routes
 const welcomeMessage = `
   <pre style="font-family: monospace;">
@@ -48,6 +53,12 @@ router.get('/api', (req, res) => {
   routes.push({
     path: '/api/Helper',
     description: 'Helper routes'
+  });
+
+  // Download Postman collection
+  routes.push({
+    path: '/api/postman',
+    description: 'Download Postman collection'
   });
 
   const formatted_routes = routes.map(route => {

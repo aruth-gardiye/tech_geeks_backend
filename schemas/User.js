@@ -6,82 +6,85 @@ const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
-const userSchema = new Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    minlength: 1,
-    maxlength: 50,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 1,
-    trim: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    minlength: 4,
-    trim: true
-  },
-  accType: {
-    type: String,
-    required: true,
-    enum: ['admin', 'support', 'client', 'provider'],
-    default: 'client'
-  },
-  firstName: {
-    type: String,
-    required: false,
-  },
-  lastName: {
-    type: String,
-    required: false,
-  },
-  tel: {
-    type: String,
-    required: false,
-  },
-  location: [{
-    _id: false,
-    address: {
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      minlength: 1,
+      maxlength: 50,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 1,
+      trim: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      minlength: 4,
+      trim: true
+    },
+    accType: {
+      type: String,
+      required: true,
+      enum: ['admin', 'support', 'client', 'provider'],
+      default: 'client'
+    },
+    firstName: {
       type: String,
       required: false,
     },
-    longitude: {
-      type: Number,
+    lastName: {
+      type: String,
+      required: false,
+    },
+    tel: {
+      type: String,
+      required: false,
+    },
+    location: [{
+      _id: false,
+      address: {
+        type: String,
+        required: false,
+      },
+      longitude: {
+        type: Number,
+        required: false
+      },
+      latitude: {
+        type: Number,
+        required: false
+      }
+    }],
+    serviceLevel: {
+      type: String,
+      required: false,
+      enum: [1, 2, 3, 4, null, ''],
+      default: null
+    },
+    avatar: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'File',
       required: false
     },
-    latitude: {
-      type: Number,
-      required: false
-    }
-  }],
-  serviceLevel: {
-    type: String,
-    required: false,
-    enum: [1, 2, 3, 4, null, ''],
-    default: null
+    onBoarded: {
+      type: Boolean,
+      default: false
+    },
+    verified: {
+      type: Boolean,
+      default: false
+    },
   },
-  avatar: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'File',
-    required: false
-  },
-  onBoarded: {
-    type: Boolean,
-    default: false
-  },
-  verified: {
-    type: Boolean,
-    default: false
-  },
-});
+  {
+    retainKeyOrder: true
+  });
 
 // hash the password
 userSchema.methods.generateHash = function (password) {

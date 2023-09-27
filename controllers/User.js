@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
 
   const user = new User({
     username: req.body.username,
-    password: req.body.password,
+    password: null,
     email: req.body.email,
     accType: req.body.accType,
     firstName: req.body.firstName,
@@ -33,6 +33,9 @@ const createUser = async (req, res) => {
     tel: req.body.tel,
     location: req.body.location
   });
+
+  // hash password
+  user.password = user.generateHash(req.body.password);
 
   user.save()
     .then(result => {
@@ -43,6 +46,7 @@ const createUser = async (req, res) => {
       });
     })
     .catch(err => {
+      console.log(err);
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
         error: err
       });
@@ -119,8 +123,8 @@ const deleteUser = async (req, res) => {
       return res.status(httpStatus.BAD_REQUEST).json({
         message: 'Invalid user id'
       });
-    } 
-    
+    }
+
     const id = new mongoose.Types.ObjectId(req.body.userId);
 
     const user = await User.findOne({ _id: id });

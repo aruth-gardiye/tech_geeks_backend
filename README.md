@@ -22,3 +22,9 @@ npm run start
 ```
 
 This will install the necessary dependencies and start the server. The server will be running on [http://localhost:3001](http://localhost:3001) with default settings.
+
+## API Documentation
+
+User documentation can be found in the [docs/User.md](docs/User.md) file.
+Job documentation can be found in the [docs/Job.md](docs/Job.md) file.
+Help documentation can be found in the [docs/Help.md](docs/Help.md) file.

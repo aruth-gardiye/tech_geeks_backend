@@ -20,9 +20,16 @@ const {
 /*
 Create a new user
 Request body: user details
-Required fields: username, email, password, accType
-Optional fields: firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified
+Required fields: 
+  username, email, password
+  , accType (valid values: client, provider, admin, support)
+Optional fields: 
+  firstName, lastName, tel, location
+  , serviceLevel (valid values: 1, 2, 3, 4, null, '')
+  , avatar, onBoarded, verified
+
 Example: https://techgeeksprotobackend.azurewebsites.net/api/User/createUser
+
 Body: 
   {
     "username": "johndoeclient",
@@ -51,8 +58,15 @@ router.post('/createUser', createUser);
 Update a specific user
 Request body: fields to update
 Required fields: userId
-Optional fields: username, email, password, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified
+Optional fields: 
+  username, email, password
+  , accType (valid values: client, provider, admin, support)
+  , firstName, lastName, tel, location
+  , serviceLevel (valid values: 1, 2, 3, 4, null, '')
+  , avatar, onBoarded, verified
+
 Example: https://techgeeksprotobackend.azurewebsites.net/api/User/updateUser
+
 Body:
 {
   "userId": "5f9f4f8c8f5c9a3c3c7c1b0b",
@@ -78,6 +92,7 @@ Body:
 */
 
 router.patch('/updateUser', updateUser);
+
 
 /*############### Delete a user ##############*/
 
@@ -188,12 +203,16 @@ router.get('/', (req, res) => {
       description: 'Create a new user',
       requiredFields: ['username', 'email', 'password', 'accType'],
       optionalFields: ['firstName', 'lastName', 'tel', 'location', 'serviceLevel', 'avatar', 'onBoarded', 'verified'],
+      validValues: {
+        accType: ['client', 'provider', 'admin', 'support'],
+        serviceLevel: [1, 2, 3, 4, null, ''],
+      },
       example: {
         url: `${baseUrl}/createUser`,
         body: {
-          username: 'johndoeclient',
+          username: 'johndoe_client',
           password: 'password',
-          email: 'johndoe@gmail',
+          email: 'johndoe@example.com',
           accType: 'client',
           firstName: 'John',
           lastName: 'Doe',
@@ -214,13 +233,17 @@ router.get('/', (req, res) => {
       description: 'Update a specific user',
       requiredFields: ['userId'],
       optionalFields: ['username', 'email', 'password', 'accType', 'firstName', 'lastName', 'tel', 'location', 'serviceLevel', 'avatar', 'onBoarded', 'verified'],
+      validValues: {
+        accType: ['client', 'provider', 'admin', 'support'],
+        serviceLevel: [1, 2, 3, 4, null, ''],
+      },
       example: {
         url: `${baseUrl}/updateUser`,
         body: {
           userId: '5f9f4f8c8f5c9a3c3c7c1b0b',
-          username: 'johndoeclient',
+          username: 'johndoe_client',
           password: 'password',
-          email: 'johndoe@gmail',
+          email: 'johndoe@example.com',
           accType: 'client',
           firstName: 'John',
           lastName: 'Doe',
@@ -274,7 +297,7 @@ router.get('/', (req, res) => {
       description: 'Get user details by username',
       requiredFields: ['username'],
       example: {
-        url: `${baseUrl}/getUserDetails/username/johndoeclient`
+        url: `${baseUrl}/getUserDetails/username/johndoe_client`
       }
     },
     {
@@ -283,7 +306,7 @@ router.get('/', (req, res) => {
       description: 'Get user details by email',
       requiredFields: ['email'],
       example: {
-        url: `${baseUrl}/getUserDetails/email/johndoe@gmail`
+        url: `${baseUrl}/getUserDetails/email/johndoe@example.com`
       }
     },
     {
@@ -294,7 +317,7 @@ router.get('/', (req, res) => {
       example: {
         url: `${baseUrl}/login`,
         body: {
-          username: 'johndoeclient',
+          username: 'johndoe_client',
           password: 'password'
         }
       }
@@ -328,10 +351,11 @@ router.get('/', (req, res) => {
   const formatted_routes = available_routes.map(route => {
     const requiredFields = route.requiredFields ? `Required fields: ${route.requiredFields.join(', ')}` : '';
     const optionalFields = route.optionalFields ? `Optional fields: ${route.optionalFields.join(', ')}` : '';
+    const validValues = route.validValues ? `Valid values: ${JSON.stringify(route.validValues, null, 2)}` : '';
     const example = route.example ? `Example: ${JSON.stringify(route.example, null, 2)}` : '';
     const divider = `\n#############################################\n`
 
-    return `${divider}Endpoint: ${route.path}\nUsage: ${route.description}\nMethod: ${route.method}\n${requiredFields}\n${optionalFields ? optionalFields + `\n` : ''}${example ? example : ''}\n`;
+    return `${divider}Endpoint: ${route.path}\nUsage: ${route.description}\nMethod: ${route.method}\n${requiredFields}\n${optionalFields ? optionalFields + `\n` : ''}${validValues ? validValues + `\n` : ''}${example ? example : ''}\n`;
   }).join('\n');
 
   res.set('Content-Type', 'text/plain');

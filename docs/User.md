@@ -44,7 +44,7 @@ The request body should contain the following required fields:
 - `username` (string): The username of the user.
 - `password` (string): The user's password.
 - `email` (string): The user's email address.
-- `accType` (string): The account type of the user.
+- `accType` (string): The account type of the user (valid values are `client` or `provider`, can be extended to include `admin` or `support` as well).
 - `firstName` (string): The user's first name.
 - `lastName` (string): The user's last name.
 - `location` (array of objects): The user's location, which includes an address, longitude, and latitude.
@@ -52,7 +52,7 @@ The request body should contain the following required fields:
 Additionally, you can include the optional fields:
 
 - `tel` (string): The user's telephone number.
-- `serviceLevel` (string): The user's service level.
+- `serviceLevel` (string): The user's service level (valid values are ``, `1`, `2`, `3`, or `4`).
 - `avatar` (string): The user's avatar image _id.
 - `onBoarded` (boolean): Whether the user has completed onboarding.
 - `verified` (boolean): Whether the user's account is verified.
@@ -100,12 +100,12 @@ Additionally, you can include the optional fields to update:
 - `username` (string): The updated username of the user.
 - `password` (string): The updated password of the user.
 - `email` (string): The updated email address of the user.
-- `accType` (string): The updated account type of the user.
+- `accType` (string): The updated account type of the user (valid values are `client` or `provider`, can be extended to include `admin` or `support` as well).
 - `firstName` (string): The updated first name of the user.
 - `lastName` (string): The updated last name of the user.
 - `tel` (string): The updated telephone number of the user.
 - `location` (array of objects): The updated location information of the user, which includes an address, longitude, and latitude.
-- `serviceLevel` (integer): The updated service level of the user.
+- `serviceLevel` (integer): The updated service level of the user (valid values are ``, `1`, `2`, `3`, or `4`).
 - `avatar` (string): The updated avatar image _id of the user.
 - `onBoarded` (boolean): Whether the user has completed onboarding (optional).
 - `verified` (boolean): Whether the user's account is verified (optional).

@@ -5,11 +5,12 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const Job = require('../schemas/Job');
 const User = require('../schemas/User');
+const moment = require('moment');
 
 // create a new job
 // Usecase: client creates a new job for service providers to bid on
-// Required: jobName, jobType, jobLocation, jobOwner
-// Optional: jobDescription, jobStartDate, jobEndDate
+// Required: jobName, jobType, jobLocation, jobOwner, jobDescription, jobDuration, jobStartDate, jobEndDate, jobPrice
+// Optional:  jobStatus
 
 const createJob = async (req, res) => {
   try {
@@ -30,12 +31,40 @@ const createJob = async (req, res) => {
       });
     }
 
+    // validate duration using start and end date
+    if (value.jobStartDate && value.jobEndDate && value.jobDuration) {
+      const startDate = moment(value.jobStartDate);
+      const endDate = moment(value.jobEndDate);
+      const duration = moment.duration(endDate.diff(startDate));
+      const hours = duration.asHours() + 24;
+
+      // calculate duration using the jobDuration object
+      const durationObj = value.jobDuration;
+
+      const durationHours = durationObj.hours || 0;
+      const durationDays = durationObj.days || 0;
+      const durationMonths = durationObj.months || 0;
+      const durationYears = durationObj.years || 0;
+
+      // calculate total duration in hours
+      const totalDuration = durationHours + durationDays * 24 + durationMonths * 30 * 24 + durationYears * 365 * 24;
+
+      // check if total duration is less than or equal to days
+      if (totalDuration > hours) {
+        const err = new Error('Job duration is greater than job start and end date');
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+    }
+
+
     // create job
     const job = new Job({
       jobName: value.jobName,
       jobDescription: value.jobDescription,
       jobType: value.jobType,
       jobLocation: value.jobLocation,
+      jobDuration: value.jobDuration,
       jobStartDate: value.jobStartDate,
       jobEndDate: value.jobEndDate,
       jobStatus: value.jobStatus,
@@ -81,6 +110,32 @@ const updateJob = async (req, res) => {
       throw err;
     }
 
+    // if anything related to duration or start and end date is updated, validate duration using start and end date
+    if (value.jobStartDate || value.jobEndDate || value.jobDuration) {
+      const startDate = moment(value.jobStartDate || job.jobStartDate);
+      const endDate = moment(value.jobEndDate || job.jobEndDate);
+      const duration = moment.duration(endDate.diff(startDate));
+      const hours = duration.asHours() + 24;
+
+      // calculate duration using the jobDuration object
+      const durationObj = value.jobDuration;
+
+      const durationHours = durationObj.hours || 0;
+      const durationDays = durationObj.days || 0;
+      const durationMonths = durationObj.months || 0;
+      const durationYears = durationObj.years || 0;
+
+      // calculate total duration in hours
+      const totalDuration = durationHours + durationDays * 24 + durationMonths * 30 * 24 + durationYears * 365 * 24;
+
+      // check if total duration is less than or equal to days
+      if (totalDuration > hours) {
+        const err = new Error('Job duration is greater than job start and end date');
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+    }
+
     // if jobPrice is updated, and new jobPrice is higher than old jobPrice, make higher bids stale
     if (value.jobPrice && value.jobPrice !== job.jobPrice) {
       const jobApplicants = job.jobApplicants;
@@ -94,7 +149,7 @@ const updateJob = async (req, res) => {
     } else if (value.jobPrice && value.jobPrice < job.jobPrice) {
       const jobApplicants = job.jobApplicants;
       jobApplicants.forEach((applicant) => {
-        if (applicant.bid > value.jobPrice && !['assigned', 'rejected', 'withdrawn'].includes(applicant.bidStatus)) {
+        if (applicant.bid <= value.jobPrice && applicant.bidStatus === 'stale') {
           applicant.bidStatus = 'submitted';
         }
       });
@@ -164,38 +219,112 @@ const updateJob = async (req, res) => {
       }
     }
 
-    // if jobStatus is updated to in-progress, check if selectedBid exists and update bidStatus to assigned
-    if (value.jobStatus === 'in-progress') {
-      const selectedBid = job.selectedBid;
-      if (!selectedBid) {
-        const err = new Error('Cannot update job status to in-progress as no bid is selected');
-        err.status = httpStatus.BAD_REQUEST;
-        throw err;
-      }
-      const jobApplicants = job.jobApplicants;
-      const selectedBidIndex = jobApplicants.findIndex((applicant) => applicant.userId.toString() === selectedBid.toString());
-      jobApplicants[selectedBidIndex].bidStatus = 'assigned';
-      job.jobStatus = 'in-progress';
-    }
+    // block jobStatus update on case by case basis
+    if (value.jobStatus) {
+      switch (value.jobStatus) {
+        case 'available': {
+          // check if job status is available, then block update if job status is anything except accepted, assigned
+          if (!['available', 'accepted', 'assigned'].includes(job.jobStatus)) {
+            const err = new Error(`Cannot update job status to available as job is ${job.jobStatus}`);
+            err.status = httpStatus.BAD_REQUEST;
+            throw err;
+          }
 
-    // if jobStatus is updated to completed, check if job is in-progress and update jobStatus to completed
-    if (value.jobStatus === 'completed') {
-      if (job.jobStatus !== 'in-progress') {
-        const err = new Error('Cannot update job status to completed as job is not in-progress');
-        err.status = httpStatus.BAD_REQUEST;
-        throw err;
-      }
-      job.jobStatus = 'completed';
-    }
+          // check if end date is passed (Date format: YYYY-MM-DD)
+          const today = moment().startOf('day');
+          const jobEndDate = moment(job.jobEndDate).startOf('day');
+          if (jobEndDate.isBefore(today)) {
+            job.jobStatus = 'expired';
 
-    // if jobStatus is updated to cancelled, check if job is available and update jobStatus to cancelled
-    if (value.jobStatus === 'cancelled') {
-      if (['in-progress', 'completed', 'cancelled', 'expired'].includes(job.jobStatus)) {
-        const err = new Error(`Cannot update job status to cancelled as job is ${job.jobStatus}`);
-        err.status = httpStatus.BAD_REQUEST;
-        throw err;
+            // remove selectedBid
+            job.selectedBid = null;
+
+            // make all bids rejected
+            const jobApplicants = job.jobApplicants;
+            jobApplicants.forEach((applicant) => {
+              applicant.bidStatus = 'rejected';
+            });
+
+          } else {
+            // if job status is assigned, remove selectedBid and corresponding applicant bidStatus to submitted
+            if (job.jobStatus === 'assigned') {
+              const selectedBid = job.selectedBid;
+              const jobApplicants = job.jobApplicants;
+              const selectedBidIndex = jobApplicants.findIndex((applicant) => applicant.userId.toString() === selectedBid.toString());
+              jobApplicants[selectedBidIndex].bidStatus = 'submitted';
+              job.selectedBid = null;
+            }
+
+            job.jobStatus = 'available';
+          } 
+        } break;
+
+        case 'accepted': {
+          // check if job status is available, then block update if job status is anything except available
+          if (job.jobStatus !== 'available') {
+            const err = new Error(`Cannot update job status to accepted as job is ${job.jobStatus}`);
+            err.status = httpStatus.BAD_REQUEST;
+            throw err;
+          }
+          job.jobStatus = 'accepted';
+        } break;
+
+        case 'in-progress': {
+          const selectedBid = job.selectedBid;
+
+          // check if selectedBid exists
+          if (!selectedBid) {
+            const err = new Error('Cannot update job status to in-progress as no bid is selected');
+            err.status = httpStatus.BAD_REQUEST;
+            throw err;
+          }
+
+          // check if job status is available, then block update if job status is anything except accepted
+          if (job.jobStatus !== 'assigned') {
+            const err = new Error(`Cannot update job status to in-progress as job is ${job.jobStatus}`);
+            err.status = httpStatus.BAD_REQUEST;
+            throw err;
+          }
+          
+          job.jobStatus = 'in-progress';
+        } break;
+
+        case 'completed': {
+          // check if job status is available, then block update if job status is anything except in-progress
+          if (job.jobStatus !== 'in-progress') {
+            const err = new Error(`Cannot update job status to completed as job is ${job.jobStatus}`);
+            err.status = httpStatus.BAD_REQUEST;
+            throw err;
+          }
+          job.jobStatus = 'completed';
+        } break;
+
+        case 'cancelled': {
+          // check if job status is available, then block update if job status is anything except available, accepted, assigned
+          if (!['available', 'accepted', 'assigned'].includes(job.jobStatus)) {
+            const err = new Error(`Cannot update job status to cancelled as job is ${job.jobStatus}`);
+            err.status = httpStatus.BAD_REQUEST;
+            throw err;
+          }
+
+          // remove selectedBid
+          job.selectedBid = null;
+
+          // make all bids rejected
+          const jobApplicants = job.jobApplicants;
+          jobApplicants.forEach((applicant) => {
+            applicant.bidStatus = 'rejected';
+          });
+
+          job.jobStatus = 'cancelled';
+        } break;
+
+        default: {
+          const err = new Error('Invalid job status');
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+        }
       }
-      job.jobStatus = 'cancelled';
     }
 
     // update job
@@ -203,6 +332,7 @@ const updateJob = async (req, res) => {
     job.jobDescription = value.jobDescription || job.jobDescription;
     job.jobType = value.jobType || job.jobType;
     job.jobLocation = value.jobLocation || job.jobLocation;
+    job.jobDuration = value.jobDuration || job.jobDuration;
     job.jobStartDate = value.jobStartDate || job.jobStartDate;
     job.jobEndDate = value.jobEndDate || job.jobEndDate;
     job.jobStatus = value.jobStatus || job.jobStatus;
@@ -355,20 +485,24 @@ const updateBid = async (req, res) => {
 
     // if bid status is accepted, assigned, rejected or stale, throw error when bid is updated
     if (value.bid && !['accepted', 'assigned', 'rejected', 'stale'].includes(bid.bidStatus)) {
-
-      // check if bid is less than jobPrice
-      if (value.bid && value.bid > job.jobPrice) {
-        const err = new Error('Bid is higher than job price');
-        err.status = httpStatus.BAD_REQUEST;
-        throw err;
+      switch (bid.bidStatus) {
+        case 'accepted':
+        case 'assigned':
+        case 'rejected':
+        case 'stale':
+          const err = new Error(`Cannot update bid due to bid is ${bid.bidStatus}`);
+          err.status = httpStatus.BAD_REQUEST;
+          throw err;
+        default:
+          // check if bid is less than jobPrice
+          if (value.bid > job.jobPrice) {
+            const err = new Error('Bid is higher than job price');
+            err.status = httpStatus.BAD_REQUEST;
+            throw err;
+          }
+          // update bid
+          bid.bid = value.bid;
       }
-
-      bid.bid = value.bid;
-
-    } else if (value.bid && value.bid != bid.bid && ['accepted', 'assigned', 'rejected', 'stale'].includes(bid.bidStatus)) {
-      const err = new Error(`Cannot update bid due to bid is ${bid.bidStatus}`);
-      err.status = httpStatus.BAD_REQUEST;
-      throw err;
     }
 
     // if bidder opted to be assigned, check if job status is accepted by client
@@ -383,7 +517,7 @@ const updateBid = async (req, res) => {
           err.status = httpStatus.BAD_REQUEST;
           throw err;
 
-        } else if (job.selectedBid !== value.userId) {
+        } else if (JSON.stringify(job.selectedBid) !== JSON.stringify(value.userId)) {
           err = new Error('Cannot assign bid as accepted bid is not submitted by bidder');
           err.status = httpStatus.BAD_REQUEST;
           throw err;
@@ -398,7 +532,7 @@ const updateBid = async (req, res) => {
       
     }
 
-    // if bidder opted to be withdrawn, check if job status is available or accepted
+    // if bidder opted to be withdrawn, check if job status is available, accepted or assigned
     if (value.bidStatus === 'withdrawn') {
       if (!['available', 'accepted', 'assigned'].includes(job.jobStatus)) {
         const err = new Error(`Cannot withdraw bid as job is ${job.jobStatus}`);
@@ -407,14 +541,46 @@ const updateBid = async (req, res) => {
       }
 
       bid.bidStatus = "withdrawn"
-      job.jobStatus = "available"
+
+      // if job status is assigned and selectedBid is bidder, update job status to available and remove selectedBid
+      if (job.jobStatus === 'assigned' && JSON.stringify(job.selectedBid) === JSON.stringify(value.userId)) {
+
+        // check if end date is passed (Date format: YYYY-MM-DD)
+        const today = moment().startOf('day');
+        const jobEndDate = moment(job.jobEndDate).startOf('day');
+        if (jobEndDate.isBefore(today)) {
+          job.jobStatus = 'expired';
+        } else {
+          job.jobStatus = 'available';
+        }
+
+        // remove selectedBid
+        job.selectedBid = null;
+
+      }
+    }
+
+    // if bidder opted to resubmit withdrawn bid, check if job status is available or accepted and bidder is not selectedBid
+    if (value.bidStatus === 'submitted' && JSON.stringify(job.selectedBid) !== JSON.stringify(value.userId)) {
+      if (!['available', 'accepted'].includes(job.jobStatus)) {
+        const err = new Error(`Cannot resubmit bid as job is ${job.jobStatus}`);
+        err.status = httpStatus.BAD_REQUEST;
+        throw err;
+      }
+
+      bid.bidStatus = "submitted"
+
+    } else if (value.bidStatus === 'submitted' && JSON.stringify(job.selectedBid) === JSON.stringify(value.userId)) {
+      const err = new Error(`Cannot resubmit bid as previous bid is already ${job.jobStatus}`);
+      err.status = httpStatus.BAD_REQUEST;
+      throw err;
     }
 
     // save job
     const updatedJob = await job.save();
 
     res.status(httpStatus.OK).json({
-      message: `Bid updated successfully`,
+      message: `Bid ${value.bidStatus || 'updated'} successfully`,
     });
   }
   catch (err) {
@@ -427,7 +593,9 @@ const updateBid = async (req, res) => {
 // get all jobs by client
 // Usecase: client gets all jobs submitted by them
 // Required: userId
-// Optional: none
+// Optional parameters: filter, sort
+// filter: jobStatus, jobType, jobPrice
+// sort: jobStatus, jobType, jobPrice
 
 const getAllJobsByClient = async (req, res) => {
   try {
@@ -440,11 +608,39 @@ const getAllJobsByClient = async (req, res) => {
       });
     }
 
+    // get query parameters for filtering and sorting
+    const { filter, sort } = req.query;
+
+    // create filter object based on query parameters
+    const filterObj = {};
+    if (filter) {
+      const filters = filter.split(',');
+      filters.forEach((f) => {
+        const [field, value] = f.split(':');
+        if (field === 'jobPrice') {
+          filterObj[field] = { $gte: value };
+        } else {
+        filterObj[field] = value;
+        }
+      });
+    }
+
+    // create sort object based on query parameters
+    const sortObj = {};
+    if (sort) {
+      const sorts = sort.split(',');
+      sorts.forEach((s) => {
+        const [field, order] = s.split(':');
+        sortObj[field] = order === 'desc' ? -1 : 1;
+      });
+    }
+
     // get all jobs, populate jobOwner and selectedBid to exclude sensitive information
-    const jobs = await Job.find({ jobOwner: userId })
+    const jobs = await Job.find({ jobOwner: userId, ...filterObj })
       .populate('jobApplicants.userId', '_id username firstName lastName')
       .populate('jobOwner', '_id username firstName lastName')
-      .populate('selectedBid', '_id username firstName lastName');
+      .populate('selectedBid', '_id username firstName lastName')
+      .sort(sortObj);
 
     // sort jobApplicants array for each job
     jobs.forEach((job) => {
@@ -485,7 +681,12 @@ const getAllJobsByClient = async (req, res) => {
 
 // get all jobs bid on by service provider
 // Usecase: service provider gets all jobs
-// Required: None
+// Required: userId
+// Optional parameters: filter, sort
+// normal filters: jobStatus, jobType, jobPrice
+// special filters: bidStatus
+// sort: jobStatus, jobType, jobPrice
+// special sort: bidStatus
 
 const getAllJobsByServiceProvider = async (req, res) => {
   try {
@@ -499,16 +700,57 @@ const getAllJobsByServiceProvider = async (req, res) => {
       });
     }
 
+    // get query parameters for filtering and sorting
+    const { filter, sort } = req.query;
+
+    // create filter object based on query parameters
+    const filterObj = {};
+    if (filter) {
+      const filters = filter.split(',');
+      filters.forEach((f) => {
+        const [field, value] = f.split(':');
+        if (field === 'bidStatus') {
+          filterObj['jobApplicants.userId'] = userId;
+          filterObj['jobApplicants.bidStatus'] = value;
+        } else if (field === 'bid') {
+          filterObj['jobApplicants.userId'] = userId;
+          filterObj['jobApplicants.bid'] = { $gte: value };
+        } else {
+          filterObj[field] = value;
+        }
+      });
+    }
+
+    // create sort object based on query parameters
+    const sortObj = {};
+    if (sort) {
+      const sorts = sort.split(',');
+      sorts.forEach((s) => {
+        const [field, order] = s.split(':');
+        if (field === 'bidStatus') {
+          sortObj['jobApplicants.bidStatus'] = order === 'desc' ? -1 : 1;
+        } else if (field === 'bid') {
+          sortObj['jobApplicants.bid'] = order === 'desc' ? -1 : 1;
+        } else {
+        sortObj[field] = order === 'desc' ? -1 : 1;
+        }
+      });
+    }
+
     // get all jobs bid on by service provider and populate jobOwner and selectedBid to exclude sensitive information
-    const jobs = await Job.find({ 'jobApplicants.userId': userId })
+    const jobs = await Job.find({ 'jobApplicants.userId': userId, ...filterObj })
       .populate('jobApplicants.userId', '_id username firstName lastName')
       .populate('jobOwner', '_id username firstName lastName')
-      .populate('selectedBid', '_id username firstName lastName');
+      .populate('selectedBid.userId', '_id username firstName lastName')
+      .sort(sortObj);
 
     // sort jobApplicants array for each job
     jobs.forEach((job) => {
       job.sortJobApplicantsByBid();
     });
+
+    console.log(filterObj);
+    console.log(sortObj);
 
     // transform jobApplicants array to include username, firstName and lastName
     const jobApplicants = jobs.map((job) => {
@@ -548,11 +790,43 @@ const getAllJobsByServiceProvider = async (req, res) => {
 
 const getAllJobs = async (req, res) => {
   try {
+    // get query parameters for filtering and sorting
+    const { filter, sort } = req.query;
+
+    // create filter object based on query parameters
+    const filterObj = {};
+    if (filter) {
+      const filters = filter.split(',');
+      filters.forEach((f) => {
+        const [field, value] = f.split(':');
+        if (field === 'jobPrice') {
+          filterObj[field] = { $gte: value };
+        } else {
+        filterObj[field] = value;
+        }
+      });
+    }
+
+    // create sort object based on query parameters
+    const sortObj = {};
+    if (sort) {
+      const sorts = sort.split(',');
+      sorts.forEach((s) => {
+        const [field, order] = s.split(':');
+        if (field === 'jobPrice') {
+          sortObj[field] = order === 'desc' ? -1 : 1;
+        } else {
+        sortObj[field] = order === 'desc' ? -1 : 1;
+        }
+      });
+    }
+
     // get all jobs and populate jobOwner and selectedBid to exclude sensitive information
-    const jobs = await Job.find()
+    const jobs = await Job.find(filterObj)
       .populate('jobApplicants.userId', '_id username firstName lastName')
       .populate('jobOwner', '_id userId username firstName lastName')
-      .populate('selectedBid', '_id username firstName lastName');
+      .populate('selectedBid', '_id username firstName lastName')
+      .sort(sortObj);
 
     // sort jobApplicants array for each job
     jobs.forEach((job) => {

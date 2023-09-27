@@ -56,6 +56,8 @@ The request body should contain the following required fields:
 
 -  `jobLocation` (object): The location of the job, including an address, longitude, and latitude.
 
+-  `jobDuration` (object): The duration of the job in hours, days, months, and years.
+
 -  `jobStartDate` (string): The start date of the job in the format "YYYY-MM-DD".
 
 -  `jobEndDate` (string): The end date of the job in the format "YYYY-MM-DD".
@@ -84,6 +86,18 @@ The request body should contain the following required fields:
 "longitude": 153.616961,
 
 "latitude": -28.652513
+
+},
+
+"jobDuration": {
+
+"hours": 8,
+
+"days": 0,
+
+"months": 0,
+
+"years": 0
 
 },
 
@@ -123,6 +137,8 @@ The request body should contain the following fields:
 
 -  `jobLocation` (object): The updated location of the job, including an address, longitude, and latitude (optional).
 
+-  `jobDuration` (object): The updated duration of the job in hours, days, months, and years (optional).
+
 -  `jobStartDate` (string): The updated start date of the job in the format "YYYY-MM-DD" (optional).
 
 -  `jobEndDate` (string): The updated end date of the job in the format "YYYY-MM-DD" (optional).
@@ -155,6 +171,18 @@ The request body should contain the following fields:
 "longitude": 153.616961,
 
 "latitude": -28.652513
+
+},
+
+"jobDuration": {
+
+"hours": 8,
+
+"days": 0,
+
+"months": 0,
+
+"years": 0
 
 },
 
@@ -260,7 +288,7 @@ Additionally, you can include the optional fields:
 
 ### Description
 
-Retrieve all jobs associated with a specific client identified by their user ID.
+Retrieve all jobs associated with a specific client identified by their user ID. Optionally, can filter and sort using query parameters.
 
 ### Request Parameters
 
@@ -268,11 +296,27 @@ The request URL should include the following required parameter:
 
 -  `userId` (string): The ID of the client for whom you want to retrieve jobs.
 
+### Optional Query Parameters
+
+#### Filter
+
+-	`jobStatus` (string): The status of the job (optional). Valid values: "available," "accepted," "in-progress," "completed," "cancelled."
+
+-	`jobType` (string): The type of job (optional). Valid values: "full-time," "part-time," "casual," "contract," "temporary," "internship."
+
+-	`jobPrice` (number): Filter greater than or equal to the specified price (optional).
+
+#### Sort
+
+- `jobPrice` (string): Sort by price (optional). Valid values: "asc," "desc."
+
+- `createdAt` (string): Sort by creation date (optional). Valid values: "asc," "desc."
+
 #### Example Request URL
 
 ```http
 
-GET http://localhost:3001/api/Job/getAllJobsByClient/5f9f4f8c8f5c9a3c3c7c1b0b
+GET http://localhost:3001/api/Job/getAllJobsByClient/5f9f4f8c8f5c9a3c3c7c1b0b?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc
 
 ```
   
@@ -285,7 +329,7 @@ GET http://localhost:3001/api/Job/getAllJobsByClient/5f9f4f8c8f5c9a3c3c7c1b0b
 
 ### Description
 
-Retrieve all jobs for which a specific service provider has submitted bids. The service provider is identified by their user ID.
+Retrieve all jobs for which a specific service provider has submitted bids. The service provider is identified by their user ID. Optionally, can filter and sort using query parameters.
 
 ### Request Parameters
 
@@ -293,11 +337,33 @@ The request URL should include the following required parameter:
 
 -  `userId` (string): The ID of the service provider for whom you want to retrieve jobs with bids.
 
+### Optional Query Parameters
+
+#### Filter
+
+- `bidStatus` (string): The status of the bid (optional). Valid values: "submitted," "accepted," "assigned," "rejected," "withdrawn," "stale."
+
+- `bid` (number): Filter greater than or equal to the specified bid amount (optional).
+
+-	`jobStatus` (string): The status of the job (optional). Valid values: "available," "accepted," "in-progress," "completed," "cancelled."
+
+-	`jobType` (string): The type of job (optional). Valid values: "full-time," "part-time," "casual," "contract," "temporary," "internship."
+
+-	`jobPrice` (number): Filter greater than or equal to the specified price (optional).
+
+#### Sort
+
+- `bid` (string): Sort by bid amount (optional). Valid values: "asc," "desc."
+
+- `jobPrice` (string): Sort by price (optional). Valid values: "asc," "desc."
+
+- `createdAt` (string): Sort by creation date (optional). Valid values: "asc," "desc."
+
 #### Example Request URL
 
 ```http
 
-GET http://localhost:3001/api/Job/getAllJobsByServiceProvider/5f9f4f8c8f5c9a3c3c7c1b0b
+GET http://localhost:3001/api/Job/getAllJobsByServiceProvider/5f9f4f8c8f5c9a3c3c7c1b0b?filter=bidStatus:assigned,bid:30&sort=bid:desc
 
 ```
   
@@ -310,17 +376,33 @@ GET http://localhost:3001/api/Job/getAllJobsByServiceProvider/5f9f4f8c8f5c9a3c3c
 
 ### Description
 
-Retrieve all available jobs.
+Retrieve all available jobs. Optionally, can filter and sort using query parameters.
 
 ### Request
 
 No request parameters are required for this endpoint.
 
+### Optional Query Parameters
+
+#### Filter
+
+-	`jobStatus` (string): The status of the job (optional). Valid values: "available," "accepted," "assigned," "in-progress," "completed," "cancelled," "expired."
+
+-	`jobType` (string): The type of job (optional). Valid values: "full-time," "part-time," "casual," "contract," "temporary," "internship."
+
+-	`jobPrice` (number): Filter greater than or equal to the specified price (optional).
+
+#### Sort
+
+- `jobPrice` (string): Sort by price (optional). Valid values: "asc," "desc."
+
+- `createdAt` (string): Sort by creation date (optional). Valid values: "asc," "desc."
+
 #### Example Request URL
 
 ```http
 
-GET http://localhost:3001/api/Job/getAllJobs
+GET http://localhost:3001/api/Job/getAllJobs?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc
 
 ```
   

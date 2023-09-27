@@ -1,0 +1,770 @@
+{
+	"info": {
+		"_postman_id": "ae9f04ac-6bfd-4b6e-8b5a-1cd81ce575d2",
+		"name": "TechGeeks Backend",
+		"description": "API Endpoints of TechGeeksProtoBackend\n\n- User\n    \n- Job\n    \n- Helper",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29222099"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"alanfresco_client\",\r\n    \"password\": \"password\",\r\n    \"email\": \"alanfresco@example.com\",\r\n    \"accType\": \"client\",\r\n    \"firstName\": \"Alan\",\r\n    \"lastName\": \"Fresco\",\r\n    \"tel\": \"0562325678\",\r\n    \"location\": [\r\n      {\r\n        \"address\": \"24 Seaview Street, Byron Bay New South Wales 2481, Australia\",\r\n        \"longitude\": 153.617448,\r\n        \"latitude\": -28.652399\r\n      }\r\n    ]\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/CreateUser/",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"CreateUser",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a specific user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"6513eae61384788dd14e8334\",\r\n    \"location\": [\r\n      {\r\n        \"address\": \"20 Seaview Street, Byron Bay New South Wales 2481, Australia\",\r\n        \"longitude\": 153.616961,\r\n        \"latitude\": -28.652513\r\n      }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/updateUser",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"updateUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUsers",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"getUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user details by userId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/userId/6513eae61384788dd14e8334",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"getUserDetails",
+								"userId",
+								"6513eae61384788dd14e8334"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user details by username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/username/johndoe_client",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"getUserDetails",
+								"username",
+								"johndoe_client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user details by email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/email/johndoe@example.com",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"getUserDetails",
+								"email",
+								"johndoe@example.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"johndoe_client\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/login",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Onboard user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"5f9f4f8c8f5c9a3c3c7c1b0b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/onBoardUser",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"onBoardUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"5f9f4f8c8f5c9a3c3c7c1b0b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/verifyUser",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"User",
+								"verifyUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job",
+			"item": [
+				{
+					"name": "Create a new job by client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobName\": \"Example Job 01\",\r\n    \"jobDescription\": \"Example Job 01 Description\",\r\n    \"jobType\": \"full-time\",\r\n    \"jobLocation\": {\r\n      \"address\": \"20 Seaview Street, Tweed Heads South New South Wales 2486, Australia\",\r\n      \"longitude\": 153.518403,\r\n      \"latitude\": -28.206651\r\n    },\r\n    \"jobDuration\": {\r\n        \"hours\": 8,\r\n        \"days\": 0,\r\n        \"months\": 0,\r\n        \"years\": 0\r\n    },\r\n    \"jobStartDate\": \"2023-09-28\",\r\n    \"jobEndDate\": \"2023-09-29\",\r\n    \"jobStatus\": \"available\",\r\n    \"jobPrice\": 40,\r\n    \"jobOwner\": \"6513eae61384788dd14e8334\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/createJob",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"createJob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a job by client",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"jobName\": \"Example Job 01 Name Update\",\r\n    \"jobDescription\": \"Example Job 01 Description Updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/updateJob",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"updateJob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit a bid by provider",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"userId\": \"6513eb8b1384788dd14e833a\",\r\n    \"bid\": 38\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/submitBid",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"submitBid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a bid by provider",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"userId\": \"6513eb8b1384788dd14e833a\",\r\n    \"bidStatus\": \"submitted\",\r\n    \"bid\": 37\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/updateBid",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"updateBid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept bid by client",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"selectedBid\": \"6513eb8b1384788dd14e833a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/updateJob",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"updateJob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Opt to be assigned to job by provider",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"userId\": \"6513eb8b1384788dd14e833a\",\r\n    \"bidStatus\": \"assigned\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/updateBid",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"updateBid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start job by client",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"jobStatus\": \"in-progress\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/updateJob",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"updateJob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete job by client",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"jobStatus\": \"completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/updateJob",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"updateJob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get job by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getJobById/6513ebe41384788dd14e833d",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"getJobById",
+								"6513ebe41384788dd14e833d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all jobs by client",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobsByClient/6513eae61384788dd14e8334?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"getAllJobsByClient",
+								"6513eae61384788dd14e8334"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "jobStatus:completed,jobType:full-time,jobPrice:30"
+								},
+								{
+									"key": "sort",
+									"value": "jobPrice:desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all jobs bid by provider",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobsByServiceProvider/6513eb8b1384788dd14e833a?filter=bidStatus:assigned,bid:30&sort=bid:desc",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"getAllJobsByServiceProvider",
+								"6513eb8b1384788dd14e833a"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "bidStatus:assigned,bid:30"
+								},
+								{
+									"key": "sort",
+									"value": "bid:desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all jobs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobs?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"getAllJobs"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "jobStatus:completed,jobType:full-time,jobPrice:30"
+								},
+								{
+									"key": "sort",
+									"value": "jobPrice:desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete job",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": \"5f9f4f8c8f5c9a3c3c7c1b0b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/deleteJob",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Job",
+								"deleteJob"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Helper",
+			"item": [
+				{
+					"name": "Get search results from address",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Helper/getSearchResults/?address=20 Seaview Street, Byron Bay",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Helper",
+								"getSearchResults",
+								""
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "20 Seaview Street, Byron Bay"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get coordinates from address",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Helper/getCordsFromAddress/?address=20 Seaview Street, Byron Bay",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Helper",
+								"getCordsFromAddress",
+								""
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "20 Seaview Street, Byron Bay"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get address from coordinates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Helper/getAddressfromCords/?longitude=153.616961&latitude=-28.652513",
+							"protocol": "https",
+							"host": [
+								"techgeeksprotobackend",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Helper",
+								"getAddressfromCords",
+								""
+							],
+							"query": [
+								{
+									"key": "longitude",
+									"value": "153.616961"
+								},
+								{
+									"key": "latitude",
+									"value": "-28.652513"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
