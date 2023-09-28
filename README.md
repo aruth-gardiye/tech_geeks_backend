@@ -25,6 +25,9 @@ This will install the necessary dependencies and start the server. The server wi
 
 ## API Documentation
 
-User documentation can be found in the [docs/User.md](docs/User.md) file.
-Job documentation can be found in the [docs/Job.md](docs/Job.md) file.
-Help documentation can be found in the [docs/Help.md](docs/Help.md) file.
+
+- **User**, which is used for creating, updating, and login of users(clients, providers), can be found in the [docs/User.md](docs/User.md) file.
+   
+- **Job**, which is used for creating, updating, and bidding on jobs can be found in the [docs/Job.md](docs/Job.md) file.
+   
+- **Helper**, which is used for searching address, and reverse or forward geocoding, can be found in the [docs/Helper.md](docs/Helper.md) file.

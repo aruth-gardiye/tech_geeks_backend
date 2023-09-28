@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "ae9f04ac-6bfd-4b6e-8b5a-1cd81ce575d2",
 		"name": "TechGeeks Backend",
-		"description": "API Endpoints of TechGeeksProtoBackend\n\n- User\n    \n- Job\n    \n- Helper",
+		"description": "**API Endpoints of TechGeeksProtoBackend**\n\n- User\n    \n- Job\n    \n- Helper\n    \n\n_**Test Clients:**_\n\nusername: johndoe_client\n\nemail: johndoe@email.com\n\npassword: password\n\nusername: alanfresco_client\n\nemail: alanfresco@email.com\n\npassword: password\n\n_**Test Providers:**_\n\nusername: janedoe_provider\n\nemail: janedoe@example.com\n\npassword: password\n\nusername: jacksonpot_provider\n\nemail: jacksonpot@email.com\n\npassword: password",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29222099"
 	},
