@@ -22,6 +22,12 @@ const {
 Create a new job
 Required fields: 
   jobName, jobDescription
+, serviceName (valid values: IT Support Level 1, IT Support Level 2, IT Support Level 3, IT Support Level 4, IT Technician, 
+                              Network Engineer, Cloud Services Engineer, Software Engineer, Software Developer, Web Developer, Web Designer, 
+                              Graphic Designer, UX Designer, UI Designer, Data Scientist, Data Analyst, Data Engineer, Data Architect, 
+                              Database Administrator, Database Developer, Database Manager, Database Architect, Database Designer, 
+                              Database Analyst, Database Engineer, Cyber Security Analyst, Cyber Security Engineer, Cyber Security Architect, Cyber Security Manager
+              )
 , jobType (valid values: full-time, part-time, contract, temporary, volunteer, internship)
 , jobLocation, jobDuration, jobStartDate, jobEndDate 
 , jobStatus (valid values: available)
@@ -33,6 +39,7 @@ Body:
 {
   "jobName": "Job Name",
   "jobDescription": "Job Description",
+  "serviceLevel": 1,
   "jobType": "full-time",
   "jobDuration": {
     "hours": 8,
@@ -63,6 +70,12 @@ Request body: fields to update
 Required fields: jobId
 Optional fields: 
   jobName, jobDescription
+  , serviceName (valid values: IT Support Level 1, IT Support Level 2, IT Support Level 3, IT Support Level 4, IT Technician, 
+                              Network Engineer, Cloud Services Engineer, Software Engineer, Software Developer, Web Developer, Web Designer, 
+                              Graphic Designer, UX Designer, UI Designer, Data Scientist, Data Analyst, Data Engineer, Data Architect, 
+                              Database Administrator, Database Developer, Database Manager, Database Architect, Database Designer, 
+                              Database Analyst, Database Engineer, Cyber Security Analyst, Cyber Security Engineer, Cyber Security Architect, Cyber Security Manager
+                )
   , jobType (valid values: full-time, part-time, contract, temporary, volunteer, internship)
   , jobLocation, jobDuration, jobStartDate, jobEndDate, selectedBid, 
   jobStatus (valid values: available, accepted, in-progress, completed, cancelled),
@@ -74,6 +87,7 @@ Body:
     "jobId": "5f9f4f8c8f5c9a3c3c7c1b0b",
     "jobName": "Job Name",
     "jobDescription": "Job Description",
+    "serviceLevel": 1,
     "jobType": "full-time",
     "jobLocation": {
       "address": "Job Address",
@@ -139,13 +153,19 @@ router.patch('/updateBid', updateBid);
 // Optional fields: filter, sort
 
 // Special filter keys: jobPrice (greater than or equal to)
-// Normal filter keys: jobStatus, jobType
+// Normal filter keys: jobStatus, jobType, serviceName
 
 // Special sort keys: jobPrice
 // Normal sort keys: createdAt
 
 // Special filter values: jobPrice (value)
 // Normal filter values: jobStatus (available, accepted, assigned, in-progress, completed, expired, cancelled), jobType (full-time, part-time, contract, temporary, volunteer, internship)
+//  , serviceName (IT Support Level 1, IT Support Level 2, IT Support Level 3, IT Support Level 4, IT Technician, 
+//                Network Engineer, Cloud Services Engineer, Software Engineer, Software Developer, Web Developer, Web Designer, 
+//                Graphic Designer, UX Designer, UI Designer, Data Scientist, Data Analyst, Data Engineer, Data Architect, 
+//                Database Administrator, Database Developer, Database Manager, Database Architect, Database Designer, 
+//                Database Analyst, Database Engineer, Cyber Security Analyst, Cyber Security Engineer, Cyber Security Architect, Cyber Security Manager
+//                )
 
 // Special sort values: jobPrice (desc, asc)
 // Normal sort values: createdAt (desc, asc)
@@ -183,18 +203,24 @@ router.get('/getAllJobsByServiceProvider/:userId', getAllJobsByServiceProvider);
 // Optional fields: filter, sort
 
 // Valid special filter keys: jobPrice (greater than or equal to)
-// Valid normal filter keys: jobStatus, jobType
+// Valid normal filter keys: jobStatus, serviceLevel, jobType 
+//  , serviceName (IT Support Level 1, IT Support Level 2, IT Support Level 3, IT Support Level 4, IT Technician,
+//                Network Engineer, Cloud Services Engineer, Software Engineer, Software Developer, Web Developer, Web Designer,
+//                Graphic Designer, UX Designer, UI Designer, Data Scientist, Data Analyst, Data Engineer, Data Architect,
+//                Database Administrator, Database Developer, Database Manager, Database Architect, Database Designer,
+//                Database Analyst, Database Engineer, Cyber Security Analyst, Cyber Security Engineer, Cyber Security Architect, Cyber Security Manager
+//                )
 
 // Valid special sort keys: jobPrice
 // Valid normal sort keys: createdAt
 
 // Valid special filter values: jobPrice (value)
-// Valid normal filter values: jobStatus (available, accepted, assigned, in-progress, completed, expired, cancelled), jobType (full-time, part-time, contract, temporary, volunteer, internship)
+// Valid normal filter values: jobStatus (available, accepted, assigned, in-progress, completed, expired, cancelled), serviceLevel (1, 2, 3, 4), jobType (full-time, part-time, contract, temporary, volunteer, internship)
 
 // Valid special sort values: jobPrice (desc, asc)
 // Valid normal sort values: createdAt (desc, asc)
 
-// Example: https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobs?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc
+// Example: https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobs?filter=jobStatus:completed,serviceLevel:1,jobType:full-time,jobPrice:30&sort=jobPrice:desc
 
 router.get('/getAllJobs', getAllJobs);
 
@@ -235,9 +261,16 @@ router.get('/', (req, res) => {
       path: '/createJob',
       method: 'POST',
       description: 'Create a new job by client',
-      requiredFields: ['jobName', 'jobDescription', 'jobType', 'jobLocation', 'jobDuration', 'jobStartDate', 'jobEndDate', 'jobStatus', 'jobPrice', 'jobOwner'],
+      requiredFields: ['jobName', 'jobDescription', 'serviceName', 'jobType', 'jobLocation', 'jobDuration', 'jobStartDate', 'jobEndDate', 'jobStatus', 'jobPrice', 'jobOwner'],
       validValues: {
-        jobType: ['full-time', 'part-time', 'contract'],
+        serviceName: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+        "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+        "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+        "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+        "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+        "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+      ],
+        jobType: ['full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship'],
         jobStatus: ['available', 'in-progress', 'completed']
       },
       example: {
@@ -245,6 +278,7 @@ router.get('/', (req, res) => {
         body: {
           "jobName": "Job Name",
           "jobDescription": "Job Description",
+          "serviceName": "IT Support Level 1",
           "jobType": "full-time",
           "jobLocation": {
             "address": "Job Address",
@@ -270,9 +304,16 @@ router.get('/', (req, res) => {
       method: 'PATCH',
       description: 'Update a job by client',
       requiredFields: ['jobId'],
-      optionalFields: ['jobName', 'jobDescription', 'jobType', 'jobLocation', 'jobDuration', 'jobStartDate', 'jobEndDate', 'selectedBid', 'jobStatus', 'jobPrice', 'jobOwner'],
+      optionalFields: ['jobName', 'jobDescription', 'serviceName', 'jobType', 'jobLocation', 'jobDuration', 'jobStartDate', 'jobEndDate', 'selectedBid', 'jobStatus', 'jobPrice', 'jobOwner'],
       validValues: {
-        jobType: ['full-time', 'part-time', 'contract'],
+        serviceName: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+        "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+        "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+        "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+        "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+        "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+      ],
+        jobType: ['full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship'],
         jobStatus: ['available', 'in-progress', 'completed']
       },
       example: {
@@ -281,6 +322,7 @@ router.get('/', (req, res) => {
           "jobId": "5f9f4f8c8f5c9a3c3c7c1b0b",
           "jobName": "Job Name",
           "jobDescription": "Job Description",
+          "serviceName": "IT Support Level 1",
           "jobType": "full-time",
           "jobLocation": {
             "address": "Job Address",
@@ -348,6 +390,13 @@ router.get('/', (req, res) => {
       validValues: {
         filter: {
           jobPrice: ['value'],
+          serviceName: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+          "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+          "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+          "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+          "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+          "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+        ],
           jobStatus: ['available', 'accepted', 'assigned', 'in-progress', 'completed', 'expired', 'cancelled'],
           jobType: ['full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship']
         },
@@ -370,6 +419,13 @@ router.get('/', (req, res) => {
         filter: {
           bidStatus: ['submitted', 'assigned', 'accepted', 'rejected', 'withdrawn', 'stale'],
           bid: ['value'],
+          serviceName: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+          "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+          "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+          "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+          "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+          "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+        ],
           jobStatus: ['available', 'accepted', 'assigned', 'in-progress', 'completed', 'expired', 'cancelled'],
           jobType: ['full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship'],
           jobPrice: ['value']
@@ -395,6 +451,13 @@ router.get('/', (req, res) => {
       validValues: {
         filter: {
           jobPrice: ['value'],
+          serviceName: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+          "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+          "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+          "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+          "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+          "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+        ],
           jobStatus: ['available', 'accepted', 'assigned', 'in-progress', 'completed', 'expired', 'cancelled'],
           jobType: ['full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship']
         },
@@ -404,7 +467,7 @@ router.get('/', (req, res) => {
         }
       },
       example: {
-        url: `${baseUrl}/getAllJobs?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc`
+        url: `${baseUrl}/getAllJobs?filter=jobStatus:completed,serviceName:IT Support Level 1,jobType:full-time,jobPrice:30&sort=jobPrice:desc`
       }
     },
     {

@@ -62,12 +62,20 @@ const userSchema = new Schema(
         required: false
       }
     }],
-    serviceLevel: {
-      type: String,
-      required: false,
-      enum: [1, 2, 3, 4, null, ''],
-      default: null
-    },
+    serviceNames: [{
+      _id: false,
+      serviceName: {
+        type: String,
+        enum: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+        "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+        "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+        "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+        "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+        "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+      ],
+        required: false,
+      }
+    }],
     avatar: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'File',
@@ -111,7 +119,15 @@ userSchema.statics.validateUser = function (user) {
       longitude: Joi.number().allow(null).allow('').optional(),
       latitude: Joi.number().allow(null).allow('').optional(),
     })),
-    serviceLevel: Joi.number().valid(1, 2, 3, 4, null, '').allow(null).allow('').optional(),
+    serviceNames: Joi.array().items(Joi.object({
+      serviceName: Joi.string().valid("IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+      "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+      "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+      "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+      "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+      "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+    ).optional()
+    })),
     avatar: Joi.string().allow(null).allow('').optional(),
     onBoarded: Joi.boolean().allow(null).allow('').optional().default(false),
     verified: Joi.boolean().allow(null).allow('').optional().default(false),
@@ -135,7 +151,15 @@ userSchema.statics.validateUserUpdate = function (user) {
       longitude: Joi.number().allow(null).allow('').optional(),
       latitude: Joi.number().allow(null).allow('').optional(),
     })),
-    serviceLevel: Joi.number().valid(1, 2, 3, 4, null, '').allow(null).allow('').optional(),
+    serviceNames: Joi.array().items(Joi.object({
+      serviceName: Joi.string().valid("IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+      "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+      "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+      "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+      "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+      "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+    ).optional()
+    })),
     avatar: Joi.string().allow(null).allow('').optional(),
     onBoarded: Joi.boolean().allow(null).allow('').optional().default(false),
     verified: Joi.boolean().allow(null).allow('').optional().default(false),

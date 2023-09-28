@@ -52,6 +52,9 @@ The request body should contain the following required fields:
 
 -  `jobDescription` (string): A brief description of the job.
 
+-  `serviceName` (string): The service name of the job.
+	- valid values: "IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4", "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer", "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist", "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer", "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer"
+
 -  `jobType` (string): The type of job (valid values: "full-time", "part-time", "casual", "contract", "temporary", "internship").
 
 -  `jobLocation` (object): The location of the job, including an address, longitude, and latitude.
@@ -76,6 +79,8 @@ The request body should contain the following required fields:
 "jobName": "Job Name",
 
 "jobDescription": "Job Description",
+
+"serviceName": "IT Support Level 1",
 
 "jobType": "full-time",
 
@@ -133,6 +138,9 @@ The request body should contain the following fields:
 
 -  `jobDescription` (string): The updated description of the job (optional).
 
+-  `serviceName` (string): The service name of the job.
+	- valid values: "IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4", "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer", "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist", "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer", "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer"
+
 -  `jobType` (string): The updated type of the job (optional).
 
 -  `jobLocation` (object): The updated location of the job, including an address, longitude, and latitude (optional).
@@ -161,6 +169,8 @@ The request body should contain the following fields:
 "jobName": "Updated Job Name",
 
 "jobDescription": "Updated Job Description",
+
+"serviceName": "IT Support Level 1",
 
 "jobType": "part-time",
 
@@ -306,6 +316,9 @@ The request URL should include the following required parameter:
 
 -	`jobPrice` (number): Filter greater than or equal to the specified price (optional).
 
+- `serviceName` (string): The service name of the job.
+	- valid values: "IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4", "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer", "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist", "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer", "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer"
+
 #### Sort
 
 - `jobPrice` (string): Sort by price (optional). Valid values: "asc," "desc."
@@ -316,7 +329,7 @@ The request URL should include the following required parameter:
 
 ```http
 
-GET http://localhost:3001/api/Job/getAllJobsByClient/5f9f4f8c8f5c9a3c3c7c1b0b?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc
+GET http://localhost:3001/api/Job/getAllJobsByClient/5f9f4f8c8f5c9a3c3c7c1b0b?filter=jobStatus:completed,serviceName:IT Support Level 1,jobType:full-time,jobPrice:30&sort=jobPrice:desc
 
 ```
   
@@ -350,6 +363,9 @@ The request URL should include the following required parameter:
 -	`jobType` (string): The type of job (optional). Valid values: "full-time," "part-time," "casual," "contract," "temporary," "internship."
 
 -	`jobPrice` (number): Filter greater than or equal to the specified price (optional).
+
+- `serviceName` (string): The service name of the job.
+	- valid values: "IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4", "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer", "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist", "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer", "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer"
 
 #### Sort
 
@@ -388,6 +404,9 @@ No request parameters are required for this endpoint.
 
 -	`jobStatus` (string): The status of the job (optional). Valid values: "available," "accepted," "assigned," "in-progress," "completed," "cancelled," "expired."
 
+- `serviceName` (string): The service name of the job.
+	- valid values: "IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4", "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer", "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist", "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer", "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer"
+
 -	`jobType` (string): The type of job (optional). Valid values: "full-time," "part-time," "casual," "contract," "temporary," "internship."
 
 -	`jobPrice` (number): Filter greater than or equal to the specified price (optional).
@@ -402,7 +421,7 @@ No request parameters are required for this endpoint.
 
 ```http
 
-GET http://localhost:3001/api/Job/getAllJobs?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc
+GET http://localhost:3001/api/Job/getAllJobs?filter=jobStatus:completed,jobType:full-time,serviceName:IT Support Level 1,jobPrice:30&sort=jobPrice:desc
 
 ```
   

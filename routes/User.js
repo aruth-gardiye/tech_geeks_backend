@@ -202,28 +202,42 @@ router.get('/', (req, res) => {
       method: 'POST',
       description: 'Create a new user',
       requiredFields: ['username', 'email', 'password', 'accType'],
-      optionalFields: ['firstName', 'lastName', 'tel', 'location', 'serviceLevel', 'avatar', 'onBoarded', 'verified'],
+      optionalFields: ['firstName', 'lastName', 'tel', 'location', 'serviceNames', 'avatar', 'onBoarded', 'verified'],
       validValues: {
         accType: ['client', 'provider', 'admin', 'support'],
-        serviceLevel: [1, 2, 3, 4, null, ''],
+        serviceNames: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+        "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+        "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+        "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+        "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+        "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+        ],
       },
       example: {
         url: `${baseUrl}/createUser`,
         body: {
-          username: 'johndoe_client',
+          username: 'jane_doe_provider',
           password: 'password',
-          email: 'johndoe@example.com',
-          accType: 'client',
-          firstName: 'John',
+          email: 'janedoe@example.com',
+          accType: 'provider',
+          firstName: 'Jane',
           lastName: 'Doe',
-          tel: '0412345678',
+          tel: '0987654321',
           location: [
             {
-              address: '20 Seaview Street, Byron Bay',
-              longitude: 153.616961,
-              latitude: -28.652513
+              address: '21 Seaview Close, Eleebana New South Wales 2282, Australia',
+              longitude: 151.65748,
+              latitude: -32.994381
             }
-          ]
+          ],
+          serviceNames: [
+            {
+              serviceName: "IT Support Level 1"
+            },
+            {
+              serviceName: "Cloud Services Engineer"
+            }
+          ],
         }
       }
     },
@@ -232,31 +246,43 @@ router.get('/', (req, res) => {
       method: 'PATCH',
       description: 'Update a specific user',
       requiredFields: ['userId'],
-      optionalFields: ['username', 'email', 'password', 'accType', 'firstName', 'lastName', 'tel', 'location', 'serviceLevel', 'avatar', 'onBoarded', 'verified'],
+      optionalFields: ['username', 'email', 'password', 'accType', 'firstName', 'lastName', 'tel', 'location', 'serviceNames', 'avatar', 'onBoarded', 'verified'],
       validValues: {
         accType: ['client', 'provider', 'admin', 'support'],
-        serviceLevel: [1, 2, 3, 4, null, ''],
+        serviceNames: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+        "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+        "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+        "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+        "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+        "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+        ],
       },
       example: {
         url: `${baseUrl}/updateUser`,
         body: {
           userId: '5f9f4f8c8f5c9a3c3c7c1b0b',
-          username: 'johndoe_client',
+          username: 'jane_doe_provider',
           password: 'password',
-          email: 'johndoe@example.com',
-          accType: 'client',
-          firstName: 'John',
+          email: 'janedoe@example.com',
+          accType: 'provider',
+          firstName: 'Jane',
           lastName: 'Doe',
-          tel: '0412345678',
+          tel: '0987654321',
           location: [
             {
-              address: '20 Seaview Street, Byron Bay',
-              longitude: 153.616961,
-              latitude: -28.652513
+              address: '21 Seaview Close, Eleebana New South Wales 2282, Australia',
+              longitude: 151.65748,
+              latitude: -32.994381
             }
           ],
-          serviceLevel: 1,
-          avatar: '5d2a3c4d5f6a7b8c9d0e1f2',
+          serviceNames: [
+            {
+              serviceName: "IT Support Level 1"
+            },
+            {
+              serviceName: "Cloud Services Engineer"
+            }
+          ],
           onBoarded: true,
           verified: true
         }

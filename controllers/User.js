@@ -23,6 +23,11 @@ const createUser = async (req, res) => {
     });
   }
 
+  // if serviceNames is provided, delete duplicates if any
+  if (req.body.serviceNames) {
+    req.body.serviceNames = [...new Set(req.body.serviceNames)];
+  }
+
   const user = new User({
     username: req.body.username,
     password: null,
@@ -31,7 +36,11 @@ const createUser = async (req, res) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     tel: req.body.tel,
-    location: req.body.location
+    location: req.body.location,
+    serviceNames: req.body.serviceNames || [],
+    avatar: req.body.avatar || null,
+    onBoarded: req.body.onBoarded || false,
+    verified: req.body.verified || false
   });
 
   // hash password
@@ -83,6 +92,13 @@ const updateUser = async (req, res) => {
 
     // remove userId from req.body
     const { userId, ...updateBody } = req.body;
+
+    // if serviceNames is provided, delete duplicates if any
+    if (updateBody.serviceNames) {
+      updateBody.serviceNames = updateBody.serviceNames.filter((service, index, self) =>
+        index === self.findIndex((s) => s.serviceName === service.serviceName)
+      );
+    }
 
     // update user
     const update = await User.findOneAndUpdate(
@@ -173,9 +189,9 @@ const getUserDetails = async (req, res) => {
       });
     }
 
-    const { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified } = user;
+    const { _id, username, email, accType, firstName, lastName, tel, location, serviceNames, avatar, onBoarded, verified } = user;
     return res.status(httpStatus.OK).json({
-      user: { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified }
+      user: { _id, username, email, accType, firstName, lastName, tel, location, serviceNames, avatar, onBoarded, verified }
     });
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -197,8 +213,8 @@ const getUsers = async (req, res) => {
     }
     // remove sensitive information and return only non-sensitive information
     const usersList = users.map(user => {
-      const { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified } = user;
-      return { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified };
+      const { _id, username, email, accType, firstName, lastName, tel, location, serviceNames, avatar, onBoarded, verified } = user;
+      return { _id, username, email, accType, firstName, lastName, tel, location, serviceNames, avatar, onBoarded, verified };
     });
     return res.status(httpStatus.OK).json({
       users: usersList
@@ -249,11 +265,11 @@ const loginUser = async (req, res) => {
     }
 
     // remove sensitive information and return only non-sensitive information
-    const { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified } = user;
+    const { _id, username, email, accType, firstName, lastName, tel, location, serviceNames, avatar, onBoarded, verified } = user;
 
     return res.status(httpStatus.OK).json({
       message: 'Login successful',
-      user: { _id, username, email, accType, firstName, lastName, tel, location, serviceLevel, avatar, onBoarded, verified }
+      user: { _id, username, email, accType, firstName, lastName, tel, location, serviceNames, avatar, onBoarded, verified }
     });
   }
   catch (error) {

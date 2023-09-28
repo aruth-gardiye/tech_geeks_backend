@@ -17,7 +17,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"alanfresco_client\",\r\n    \"password\": \"password\",\r\n    \"email\": \"alanfresco@example.com\",\r\n    \"accType\": \"client\",\r\n    \"firstName\": \"Alan\",\r\n    \"lastName\": \"Fresco\",\r\n    \"tel\": \"0562325678\",\r\n    \"location\": [\r\n      {\r\n        \"address\": \"24 Seaview Street, Byron Bay New South Wales 2481, Australia\",\r\n        \"longitude\": 153.617448,\r\n        \"latitude\": -28.652399\r\n      }\r\n    ]\r\n  }",
+							"raw": "{\r\n    \"username\": \"jacksonpot_provider\",\r\n    \"password\": \"password\",\r\n    \"email\": \"jacksonpot@example.com\",\r\n    \"accType\": \"provider\",\r\n    \"firstName\": \"Jackson\",\r\n    \"lastName\": \"Pot\",\r\n    \"tel\": \"1234525345\",\r\n    \"location\": [\r\n      {\r\n        \"address\": \"22 Seaview Street, Kotara New South Wales 2289, Australia\",\r\n        \"longitude\": 151.698759,\r\n        \"latitude\": -32.942936\r\n      }\r\n    ],\r\n    \"serviceNames\": [\r\n        {\r\n        \"serviceName\": \"IT Support Level 2\"\r\n        },\r\n        {\r\n        \"serviceName\": \"Cloud Services Engineer\"\r\n        }\r\n    ]\r\n  }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -49,7 +49,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"6513eae61384788dd14e8334\",\r\n    \"location\": [\r\n      {\r\n        \"address\": \"20 Seaview Street, Byron Bay New South Wales 2481, Australia\",\r\n        \"longitude\": 153.616961,\r\n        \"latitude\": -28.652513\r\n      }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"userId\": \"6514f86d8a8ed8f82295df3a\",\r\n    \"location\": [\r\n      {\r\n        \"address\": \"22 Seaview Street, Kotara New South Wales 2289, Australia\",\r\n        \"longitude\": 151.698759,\r\n        \"latitude\": -32.942936\r\n      }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -101,7 +101,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/userId/6513eae61384788dd14e8334",
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/userId/6514f8218a8ed8f82295df37",
 							"protocol": "https",
 							"host": [
 								"techgeeksprotobackend",
@@ -113,7 +113,7 @@
 								"User",
 								"getUserDetails",
 								"userId",
-								"6513eae61384788dd14e8334"
+								"6514f8218a8ed8f82295df37"
 							]
 						}
 					},
@@ -125,7 +125,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/username/johndoe_client",
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/username/janedoe_provider",
 							"protocol": "https",
 							"host": [
 								"techgeeksprotobackend",
@@ -137,7 +137,7 @@
 								"User",
 								"getUserDetails",
 								"username",
-								"johndoe_client"
+								"janedoe_provider"
 							]
 						}
 					},
@@ -149,7 +149,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/email/johndoe@example.com",
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/User/getUserDetails/email/janedoe@example.com",
 							"protocol": "https",
 							"host": [
 								"techgeeksprotobackend",
@@ -161,7 +161,7 @@
 								"User",
 								"getUserDetails",
 								"email",
-								"johndoe@example.com"
+								"janedoe@example.com"
 							]
 						}
 					},
@@ -205,7 +205,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"5f9f4f8c8f5c9a3c3c7c1b0b\"\r\n}",
+							"raw": "{\r\n    \"userId\": \"6514f8218a8ed8f82295df37\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -239,7 +239,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"5f9f4f8c8f5c9a3c3c7c1b0b\"\r\n}",
+							"raw": "{\r\n    \"userId\": \"6514f8218a8ed8f82295df37\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -275,7 +275,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"jobName\": \"Example Job 01\",\r\n    \"jobDescription\": \"Example Job 01 Description\",\r\n    \"jobType\": \"full-time\",\r\n    \"jobLocation\": {\r\n      \"address\": \"20 Seaview Street, Tweed Heads South New South Wales 2486, Australia\",\r\n      \"longitude\": 153.518403,\r\n      \"latitude\": -28.206651\r\n    },\r\n    \"jobDuration\": {\r\n        \"hours\": 8,\r\n        \"days\": 0,\r\n        \"months\": 0,\r\n        \"years\": 0\r\n    },\r\n    \"jobStartDate\": \"2023-09-28\",\r\n    \"jobEndDate\": \"2023-09-29\",\r\n    \"jobStatus\": \"available\",\r\n    \"jobPrice\": 40,\r\n    \"jobOwner\": \"6513eae61384788dd14e8334\"\r\n}",
+							"raw": "{\r\n    \"jobName\": \"Example Job 01\",\r\n    \"jobDescription\": \"Example Job 01 Description\",\r\n    \"serviceName\": \"IT Support Level 1\",\r\n    \"jobType\": \"full-time\",\r\n    \"jobLocation\": {\r\n      \"address\": \"20 Seaview Street, Tweed Heads South New South Wales 2486, Australia\",\r\n      \"longitude\": 153.518403,\r\n      \"latitude\": -28.206651\r\n    },\r\n    \"jobDuration\": {\r\n        \"hours\": 8,\r\n        \"days\": 0,\r\n        \"months\": 0,\r\n        \"years\": 0\r\n    },\r\n    \"jobStartDate\": \"2023-09-28\",\r\n    \"jobEndDate\": \"2023-09-29\",\r\n    \"jobStatus\": \"available\",\r\n    \"jobPrice\": 40,\r\n    \"jobOwner\": \"6514f7958a8ed8f82295df31\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -306,7 +306,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"jobName\": \"Example Job 01 Name Update\",\r\n    \"jobDescription\": \"Example Job 01 Description Updated\"\r\n}",
+							"raw": "{\r\n    \"jobId\": \"6514ff4f428a4bf71f06c990\",\r\n    \"jobName\": \"Example Job 01 Name Update\",\r\n    \"jobDescription\": \"Example Job 01 Description Updated\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -337,7 +337,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"userId\": \"6513eb8b1384788dd14e833a\",\r\n    \"bid\": 38\r\n}",
+							"raw": "{\r\n    \"jobId\": \"6514ff4f428a4bf71f06c990\",\r\n    \"userId\": \"6514f86d8a8ed8f82295df3a\",\r\n    \"bid\": 38\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -368,7 +368,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"userId\": \"6513eb8b1384788dd14e833a\",\r\n    \"bidStatus\": \"submitted\",\r\n    \"bid\": 37\r\n}",
+							"raw": "{\r\n    \"jobId\": \"6514ff4f428a4bf71f06c990\",\r\n    \"userId\": \"6514f86d8a8ed8f82295df3a\",\r\n    \"bidStatus\": \"submitted\",\r\n    \"bid\": 37\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -461,7 +461,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"jobStatus\": \"in-progress\"\r\n}",
+							"raw": "{\r\n    \"jobId\": \"6514ff4f428a4bf71f06c990\",\r\n    \"jobStatus\": \"in-progress\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -492,7 +492,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"jobId\": \"6513ebe41384788dd14e833d\",\r\n    \"jobStatus\": \"completed\"\r\n}",
+							"raw": "{\r\n    \"jobId\": \"6514ff4f428a4bf71f06c990\",\r\n    \"jobStatus\": \"completed\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -522,7 +522,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getJobById/6513ebe41384788dd14e833d",
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getJobById/6514ff4f428a4bf71f06c990",
 							"protocol": "https",
 							"host": [
 								"techgeeksprotobackend",
@@ -533,7 +533,7 @@
 								"api",
 								"Job",
 								"getJobById",
-								"6513ebe41384788dd14e833d"
+								"6514ff4f428a4bf71f06c990"
 							]
 						}
 					},
@@ -545,7 +545,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobsByClient/6513eae61384788dd14e8334?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc",
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobsByClient/6514f7958a8ed8f82295df31?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc",
 							"protocol": "https",
 							"host": [
 								"techgeeksprotobackend",
@@ -556,7 +556,7 @@
 								"api",
 								"Job",
 								"getAllJobsByClient",
-								"6513eae61384788dd14e8334"
+								"6514f7958a8ed8f82295df31"
 							],
 							"query": [
 								{
@@ -578,7 +578,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobsByServiceProvider/6513eb8b1384788dd14e833a?filter=bidStatus:assigned,bid:30&sort=bid:desc",
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobsByServiceProvider/6514f86d8a8ed8f82295df3a?filter=bidStatus:assigned,bid:30&sort=bid:desc",
 							"protocol": "https",
 							"host": [
 								"techgeeksprotobackend",
@@ -589,7 +589,7 @@
 								"api",
 								"Job",
 								"getAllJobsByServiceProvider",
-								"6513eb8b1384788dd14e833a"
+								"6514f86d8a8ed8f82295df3a"
 							],
 							"query": [
 								{
@@ -611,7 +611,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobs?filter=jobStatus:completed,jobType:full-time,jobPrice:30&sort=jobPrice:desc",
+							"raw": "https://techgeeksprotobackend.azurewebsites.net/api/Job/getAllJobs?filter=jobStatus:completed,serviceName:IT Support Level 1,jobType:full-time,jobPrice:30&sort=jobPrice:desc",
 							"protocol": "https",
 							"host": [
 								"techgeeksprotobackend",
@@ -626,7 +626,7 @@
 							"query": [
 								{
 									"key": "filter",
-									"value": "jobStatus:completed,jobType:full-time,jobPrice:30"
+									"value": "jobStatus:completed,serviceName:IT Support Level 1,jobType:full-time,jobPrice:30"
 								},
 								{
 									"key": "sort",

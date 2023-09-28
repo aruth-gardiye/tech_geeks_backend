@@ -52,7 +52,8 @@ The request body should contain the following required fields:
 Additionally, you can include the optional fields:
 
 - `tel` (string): The user's telephone number.
-- `serviceLevel` (string): The user's service level (valid values are ``, `1`, `2`, `3`, or `4`).
+- `serviceNames` (array of objects): Capable service names of the user.
+  - valid values: "IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4", "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer", "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist", "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer", "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer"
 - `avatar` (string): The user's avatar image _id.
 - `onBoarded` (boolean): Whether the user has completed onboarding.
 - `verified` (boolean): Whether the user's account is verified.
@@ -61,21 +62,28 @@ Additionally, you can include the optional fields:
 
 ```json
 {
-  "username": "janedoe_provider",
+  "username": "jane_doe_provider",
   "password": "password",
   "email": "janedoe@example.com",
   "accType": "provider",
   "firstName": "Jane",
   "lastName": "Doe",
-  "tel": "0412345678",
+  "tel": "0987654321",
   "location": [
     {
-      "address": "20 Seaview Street, Byron Bay",
-      "longitude": 153.616961,
-      "latitude": -28.652513
+      "address": "21 Seaview Close, Eleebana New South Wales 2282, Australia",
+      "longitude": 151.65748,
+      "latitude": -32.994381
     }
   ],
-  "serviceLevel": "2"
+  "serviceNames": [
+    {
+      "serviceName": "IT Support Level 1"
+    },
+    {
+      "serviceName": "Cloud Services Engineer"
+    }
+  ]
 }
 ```
 
@@ -105,7 +113,8 @@ Additionally, you can include the optional fields to update:
 - `lastName` (string): The updated last name of the user.
 - `tel` (string): The updated telephone number of the user.
 - `location` (array of objects): The updated location information of the user, which includes an address, longitude, and latitude.
-- `serviceLevel` (integer): The updated service level of the user (valid values are ``, `1`, `2`, `3`, or `4`).
+- `serviceNames` (array of objects): The updated capable service names of the user.
+  - valid values: "IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4", "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer", "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist", "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer", "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer"
 - `avatar` (string): The updated avatar image _id of the user.
 - `onBoarded` (boolean): Whether the user has completed onboarding (optional).
 - `verified` (boolean): Whether the user's account is verified (optional).
@@ -115,21 +124,30 @@ Additionally, you can include the optional fields to update:
 ```json
 {
   "userId": "5f9f4f8c8f5c9a3c3c7c1b0b",
-  "username": "johndoe_client",
+  "username": "jane_doe_provider",
   "password": "password",
-  "email": "johndoe@example.com",
-  "accType": "client",
-  "firstName": "John",
+  "email": "janedoe@example.com",
+  "accType": "provider",
+  "firstName": "Jane",
   "lastName": "Doe",
-  "tel": "0412345678",
+  "tel": "0987654321",
   "location": [
     {
-      "address": "20 Seaview Street, Byron Bay",
-      "longitude": 153.616961,
-      "latitude": -28.652513
+      "address": "21 Seaview Close, Eleebana New South Wales 2282, Australia",
+      "longitude": 151.65748,
+      "latitude": -32.994381
+    }
+  ],
+  "serviceNames": [
+    {
+      "serviceName": "IT Support Level 1"
+    },
+    {
+      "serviceName": "Cloud Services Engineer"
     }
   ],
   "avatar": "5d2a3c4d5f6a7b8c9d0e1f2",
+  "onBoarded": true,
   "verified": true
 }
 ```

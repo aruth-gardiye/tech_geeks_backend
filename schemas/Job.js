@@ -21,6 +21,19 @@ const jobSchema = new Schema(
       minlength: 1,
       trim: true
     },
+    serviceName: {
+      type: String,
+      required: false,
+      enum: ["IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+      "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+      "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+      "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+      "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+      "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager",
+    ],
+      minlength: 1,
+      trim: true
+    },
     jobType: {
       type: String,
       required: true,
@@ -165,6 +178,13 @@ jobSchema.statics.validateJob = function (job) {
   const schema = Joi.object({
     jobName: Joi.string().min(1).required(),
     jobDescription: Joi.string().min(1).optional(),
+    serviceName: Joi.string().valid("IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+    "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+    "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+    "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+    "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+    "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+  ).optional(),
     jobType: Joi.string().valid('full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship').required(),
     jobLocation: Joi.object({
       address: Joi.string().min(1).optional(),
@@ -197,6 +217,13 @@ jobSchema.statics.validateJobUpdate = function (job) {
     jobId: Joi.string().hex().length(24).required(),
     jobName: Joi.string().min(1).optional(),
     jobDescription: Joi.string().min(1).optional(),
+    serviceName: Joi.string().valid("IT Support Level 1", "IT Support Level 2", "IT Support Level 3", "IT Support Level 4",
+    "IT Technician", "Network Engineer", "Cloud Services Engineer", "Software Engineer", "Software Developer",
+    "Web Developer", "Web Designer", "Graphic Designer", "UX Designer", "UI Designer", "Data Scientist",
+    "Data Analyst", "Data Engineer", "Data Architect", "Database Administrator", "Database Developer",
+    "Database Manager", "Database Architect", "Database Designer", "Database Analyst", "Database Engineer",
+    "Cyber Security Analyst", "Cyber Security Engineer", "Cyber Security Architect", "Cyber Security Manager"
+  ).optional(),
     jobType: Joi.string().valid('full-time', 'part-time', 'contract', 'temporary', 'volunteer', 'internship').optional(),
     jobLocation: Joi.object({
       address: Joi.string().min(1).optional(),

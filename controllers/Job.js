@@ -9,7 +9,7 @@ const moment = require('moment');
 
 // create a new job
 // Usecase: client creates a new job for service providers to bid on
-// Required: jobName, jobType, jobLocation, jobOwner, jobDescription, jobDuration, jobStartDate, jobEndDate, jobPrice
+// Required: jobName, serviceName, jobType, jobLocation, jobOwner, jobDescription, jobDuration, jobStartDate, jobEndDate, jobPrice
 // Optional:  jobStatus
 
 const createJob = async (req, res) => {
@@ -62,6 +62,7 @@ const createJob = async (req, res) => {
     const job = new Job({
       jobName: value.jobName,
       jobDescription: value.jobDescription,
+      serviceName: value.serviceName,
       jobType: value.jobType,
       jobLocation: value.jobLocation,
       jobDuration: value.jobDuration,
@@ -90,7 +91,7 @@ const createJob = async (req, res) => {
 // update job
 // Usecase: client updates a job
 // Required: jobId
-// Optional: jobName, jobDescription, jobType, jobLocation, jobStartDate, jobEndDate, jobStatus, jobPrice, jobOwner
+// Optional: jobName, jobDescription, serviceName, jobType, jobLocation, jobStartDate, jobEndDate, jobStatus, jobPrice, jobOwner
 
 const updateJob = async (req, res) => {
   try {
@@ -330,6 +331,7 @@ const updateJob = async (req, res) => {
     // update job
     job.jobName = value.jobName || job.jobName;
     job.jobDescription = value.jobDescription || job.jobDescription;
+    job.serviceName = value.serviceName || job.serviceName;
     job.jobType = value.jobType || job.jobType;
     job.jobLocation = value.jobLocation || job.jobLocation;
     job.jobDuration = value.jobDuration || job.jobDuration;
@@ -594,7 +596,7 @@ const updateBid = async (req, res) => {
 // Usecase: client gets all jobs submitted by them
 // Required: userId
 // Optional parameters: filter, sort
-// filter: jobStatus, jobType, jobPrice
+// filter: jobStatus, jobType, jobPrice, serviceName
 // sort: jobStatus, jobType, jobPrice
 
 const getAllJobsByClient = async (req, res) => {
@@ -683,7 +685,7 @@ const getAllJobsByClient = async (req, res) => {
 // Usecase: service provider gets all jobs
 // Required: userId
 // Optional parameters: filter, sort
-// normal filters: jobStatus, jobType, jobPrice
+// normal filters: jobStatus, jobType, jobPrice, serviceName
 // special filters: bidStatus
 // sort: jobStatus, jobType, jobPrice
 // special sort: bidStatus
@@ -749,9 +751,6 @@ const getAllJobsByServiceProvider = async (req, res) => {
       job.sortJobApplicantsByBid();
     });
 
-    console.log(filterObj);
-    console.log(sortObj);
-
     // transform jobApplicants array to include username, firstName and lastName
     const jobApplicants = jobs.map((job) => {
       return job.jobApplicants.map((applicant) => {
@@ -786,7 +785,9 @@ const getAllJobsByServiceProvider = async (req, res) => {
 // get all jobs
 // Usecase: get all jobs
 // Required: none
-// Optional: none
+// Optional: filter, sort
+// filter: jobStatus, jobType, jobPrice, serviceName
+// sort: jobStatus, jobType, jobPrice
 
 const getAllJobs = async (req, res) => {
   try {
